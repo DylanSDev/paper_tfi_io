@@ -1,0 +1,237 @@
+\documentclass[conference]{IEEEtran}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{cite}
+
+\begin{document}
+
+% --- PORTADA EN UNA COLUMNA ---
+\onecolumn
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    {\Huge\bfseries Optimización de la gestión de recursos críticos hospitalarios: integración de pronósticos epidemiológicos y programación lineal ante brotes estacionales\par}
+    \vspace{2cm}
+    {\Large\textbf{Trabajo Final Integrador: Segundo Avance}\par}
+    \vspace{2cm}
+    {\large \textbf{Autores:}\par}
+    \vspace{0.5cm}
+    Bellor Maria Eugenia\\
+    Diaz Dylan Santiago\\
+    Jimenez Fernando Emanuel\\
+    Veliz Ignacio Martín\\
+    Zato Sosa Celina Abigail\par
+    \vspace{2.5cm}
+    {\large \textbf{Universidad Tecnológica Nacional}\\
+    Facultad Regional Tucumán\\
+    Ingeniería en Sistemas de Información\par}
+    \vspace{1cm}
+    {\large \textbf{Asignatura:} Investigación Operativa\par}
+    \vspace{1cm}
+    {\large \textbf{Profesores:}\\
+    Dra. Ing. Gramajo Guadalupe\\
+    Ing. Rojas Cristina\\
+    Ing. Fraga Alvaro\par}
+    \vfill
+    {\large Tucumán, Abril de 2026\par}
+\end{titlepage}
+
+% --- RESTAURAR A DOS COLUMNAS PARA EL DESARROLLO ---
+\twocolumn
+
+\begin{abstract}
+Este trabajo propone un sistema de soporte de decisiones mediante Investigación Operativa para optimizar la logística en hospitales públicos de Tucumán ante brotes estacionales de dengue, bronquiolitis e influenza. La metodología consta de dos fases: primero, un modelo predictivo (Suavización Exponencial Triple Holt-Winters) para proyectar la demanda semanal según tendencia y estacionalidad histórica. Segundo, un modelo de Programación Lineal Entera Mixta Multiobjetivo que optimiza la asignación semanal de siete recursos críticos (camas, UTI, insumos y personal). El algoritmo resuelve la tensión entre minimizar costos/penalizaciones y maximizar la atención priorizando casos de alta letalidad, garantizando eficiencia operativa y rigor ético-médico bajo condiciones de alta presión epidemiológica.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Investigación Operativa, Programación Lineal Multiobjetivo, Pronósticos Epidemiológicos, Holt-Winters, Asignación de Recursos Hospitalarios.
+\end{IEEEkeywords}
+
+\section{Fundamentación}
+Los sistemas de salud pública en Tucumán enfrentan tensiones extremas ante la coexistencia estacional de dengue, bronquiolitis e influenza, provocando la frecuente saturación hospitalaria y el desabastecimiento de insumos críticos (Ministerio de Salud Pública de Tucumán, 2024). Esta volatilidad epidemiológica exige pasar de una respuesta reactiva a una planificación sanitaria proactiva.
+
+Para evitar el colapso, es vital anticipar la demanda de pacientes. El análisis de series temporales mediante la Suavización Exponencial de Holt-Winters ha demostrado ser altamente efectivo en la predicción de brotes infecciosos, capturando con precisión las tendencias y los marcados patrones estacionales (Abas et al., 2022; Universiti Teknologi MARA, 2021).
+
+Sin embargo, este pronóstico debe acompañarse de una gestión logística eficiente. La aplicación de la Investigación Operativa en sistemas de salud, mediante modelos de programación lineal multiobjetivo, permite optimizar la asignación de recursos escasos, mejorando la utilización de la infraestructura y reduciendo costos operativos al anticiparse a la saturación (Wave, 2023; Preprints.org, 2025).
+
+Por lo tanto, este trabajo se fundamenta en la sinergia de ambas herramientas. Los pronósticos de Holt-Winters estimarán la demanda futura, y un modelo de Programación Lineal Entera Mixta optimizará la asignación semanal de recursos hospitalarios finitos, priorizando la atención de los casos de mayor gravedad clínica para garantizar equidad, eficiencia y minimizar la mortalidad.
+
+\section{Objetivos}
+Ante la histórica ineficiencia distributiva del sistema sanitario y la consecuente saturación hospitalaria durante picos epidemiológicos, resulta imperativo adoptar herramientas de planificación proactiva que garanticen una atención equitativa y oportuna (Dirección de Investigación para la Salud, 2017). En respuesta a esta necesidad, se define:
+
+\subsection{Objetivo Principal}
+Desarrollar un sistema de soporte de decisiones fundamentado en modelos de Investigación Operativa para optimizar la gestión logística y la asignación de recursos críticos en hospitales públicos de la provincia de Tucumán frente a la demanda estacional aguda por brotes de dengue, bronquiolitis e influenza.
+
+\subsection{Objetivos Específicos}
+\begin{itemize}
+    \item Proyectar la demanda semanal de atención médica para las patologías en estudio mediante el análisis predictivo de series temporales, implementando el método de Suavización Exponencial Triple (Holt-Winters Multiplicativo) para capturar tendencias y estacionalidades.
+    \item Formular un modelo de Programación Lineal Entera Mixta (PLEM) Multiobjetivo de carácter estático que sistematice la asignación de capacidades limitadas, incluyendo camas de internación, unidades de cuidados críticos (UTI), terapias de oxígeno, kits médicos y horas de personal.
+    \item Minimizar los costos operativos y las penalizaciones por faltantes de recursos a través de la optimización del algoritmo matemático.
+    \item Maximizar la cantidad de pacientes atendidos integrando un factor de ponderación clínica que priorice sistemáticamente los casos de mayor letalidad, garantizando el cumplimiento de los protocolos de resguardo ético-médico.
+\end{itemize}
+
+\section{Marco Conceptual}
+\begin{itemize}
+    \item \textbf{Patología epidémica estacional:} Enfermedad infecciosa aguda con incrementos masivos y cíclicos anuales (dengue, bronquiolitis e influenza).
+    \item \textbf{Demanda epidemiológica aguda:} Picos repentinos de pacientes que amenazan con saturar la capacidad instalada y agotar los presupuestos.
+    \item \textbf{Recurso crítico asistencial:} Elemento finito e indispensable (camas de internación, UTI, oxigenoterapia, kits médicos y personal de salud).
+    \item \textbf{Capacidad neta hospitalaria:} Disponibilidad operativa real, sujeta a restricciones estrictas de presupuesto, espacio y protocolos.
+    \item \textbf{Planificación sanitaria proactiva:} Estrategia para anticipar necesidades futuras y evitar el colapso hospitalario frente a crisis epidemiológicas.
+    \item \textbf{Ponderación clínica (Triage):} Priorización matemática de atención basada en la severidad y la letalidad histórica de cada paciente.
+    \item \textbf{Penalización por déficit de atención:} Costo socioeconómico, legal y ético asumido por el sistema público ante cada paciente no atendido.
+    \item \textbf{Logística de Contingencia Sanitaria:} Abastecimiento y distribución eficiente de recursos para sostener la operatividad ininterrumpida.
+    \item \textbf{Costo Operativo Hospitalario:} Erogación financiera base y extraordinaria requerida para sostener la infraestructura y el capital humano.
+\end{itemize}
+
+\section{Marco Teórico}
+\begin{itemize}
+    \item \textbf{Pronóstico:} Técnica analítica de la Investigación Operativa que utiliza datos históricos y modelos matemáticos para proyectar escenarios futuros, reduciendo la incertidumbre del sistema (Anderson et al., 2011; Winston, 2005).
+    \item \textbf{Suavización Exponencial Triple (Holt-Winters):} Método que descompone y proyecta simultáneamente nivel, tendencia y estacionalidad. Es indispensable para estructurar alertas tempranas en enfermedades estacionales (Ministerio de Salud de la Nación Argentina, 2023).
+    \item \textbf{Investigación Operativa (IO):} Disciplina cuantitativa que optimiza el rendimiento de un sistema sujeto a restricciones, proveyendo el soporte analítico para readecuar recursos hospitalarios ante brotes (SIPROSA, 2024).
+    \item \textbf{Programación Lineal Entera Mixta (PLEM):} Técnica matemática de optimización sujeta a limitaciones lógicas, donde variables clave (como pacientes o camas) toman valores enteros estrictos (Bonomo, Durán, \& Marenco, 2020).
+    \item \textbf{Modelo Multiobjetivo:} Variante de optimización para resolver problemas con metas en conflicto directo, buscando un equilibrio entre minimizar costos operativos y maximizar la cobertura médica priorizada (Winston, 2005).
+\end{itemize}
+
+\section{Marco Contextual}
+\subsection{Contexto Demográfico y Población de Riesgo}
+El presente modelo de optimización logística se enmarca geográficamente en la provincia de Tucumán. Según los datos definitivos del Censo Nacional 2022 (INDEC, 2023), la provincia cuenta con una población de 1.703.186 habitantes. De este total, se estima que aproximadamente el 42\% depende de manera exclusiva del subsistema público de salud (SIPROSA), careciendo de cobertura médica privada u obra social.
+
+Para el diseño del modelo de asignación de recursos, es fundamental segmentar a esta población usuaria del sistema público, ya que las patologías epidémicas bajo estudio impactan de manera asimétrica según el grupo etario. La siguiente tabla detalla la población vulnerable que representa la "demanda potencial" del sistema hospitalario:
+\textit{[Tabla 1. Distribución demográfica de riesgo y dependencia del sistema público en Tucumán (Basado en INDEC, 2023)]}
+
+\subsection{Escenario de Máxima Tensión Epidemiológica (Referencia Histórica)}
+El modelo de pronóstico y asignación está diseñado para operar en condiciones de crisis aguda. Para establecer el comportamiento esperado de la demanda ($D_i$), el modelo toma como referencia el escenario histórico de máxima tensión sanitaria registrado en la provincia durante el ciclo 2023-2024.
+
+En dicho período, el sistema hospitalario tucumano enfrentó un "estrés operativo sin precedentes" al superponerse el mayor brote histórico de dengue de la región con el aumento temprano de las Infecciones Respiratorias Agudas Bajas (IRAB). La crisis alcanzó su punto de saturación máxima entre las Semanas Epidemiológicas (SE) 15 y 19. El siguiente cuadro ilustra la crudeza de la incidencia semanal que los efectores de salud debieron absorber, justificando la necesidad de una herramienta de Investigación Operativa para la toma de decisiones:
+\textit{[Tabla 2. Registro histórico del pico de crisis multi epidémica en Tucumán (Valores de referencia basados en el Boletín Epidemiológico Nacional, 2024)]}
+
+\subsection{Parámetros Clínicos: Hospitalización, Severidad y Letalidad}
+Para que el modelo de Programación Lineal asigne los recursos de manera ética y eficiente, requiere parámetros que traduzcan la enfermedad en necesidad de insumos. Las tasas de consumo tecnológico ($T_{i,r}$) y el índice ponderador de gravedad de la función objetivo multiobjetivo ($\mu_i$) se estructuran tomando como base los protocolos oficiales de la Organización Mundial de la Salud (OMS) y la Organización Panamericana de la Salud (OPS).
+
+No todos los casos notificados (Tabla 2) requieren atención hospitalaria. El modelo filtra esta demanda bruta utilizando las tasas de hospitalización esperadas para cada patología y clasifica la prioridad de atención en base a su letalidad en grupos de riesgo:
+\textit{[Tabla 3. Indicadores clínicos de severidad y requerimientos asistenciales (Basado en OMS y OPS)]}
+
+\subsection{Operativización Financiera y Restricciones de Capacidad}
+Un efector de tercer nivel de complejidad en la red del SIPROSA (como el Hospital Padilla o el Hospital Centro de Salud) opera con una capacidad instalada rígida. Al enfrentar el brote, el modelo considera únicamente la capacidad neta disponible, descontando la carga base ineludible (pacientes traumatológicos, oncológicos, cardiovasculares), la cual ocupa históricamente entre un 60\% y un 70\% de las camas físicas del hospital.
+
+En cuanto a las restricciones económicas, la formulación matemática de los costos operativos unitarios ($C_r$) y del límite de gasto semanal ($PresupuestoMax$) no se parametrizará con valores fijos estáticos. Dada la alta volatilidad macroeconómica y la constante actualización de las partidas ministeriales, el modelo asume un diseño general y dinámico. En la práctica algorítmica, los parámetros serán ingresados al modelo de optimización de acuerdo con los datos obtenidos del pronóstico, y a los valores reales de los recursos de un hospital específico. Esto garantiza que el modelo mantenga su robustez técnica y aplicabilidad en el tiempo, calculando la frontera de eficiencia (solución óptima) basada estrictamente en los valores de mercado y presupuesto vigentes en el instante exacto de la toma de decisión.
+
+\subsection{Formulación del modelo matemático adecuado al contexto}
+
+\subsubsection{Fase Predictiva: Modelo de Suavización Exponencial Triple}
+Para la estimación de la demanda semanal de pacientes ($D_i$) que alimentará el modelo de optimización, se utiliza el método de Holt-Winters con estacionalidad multiplicativa. Este modelo es matemáticamente superior para fenómenos epidemiológicos estacionales, ya que asume que la amplitud de los picos de contagio no es constante, sino proporcional al nivel general de la serie.
+
+El algoritmo descompone la serie histórica de casos semanales mediante tres ecuaciones de estado recurrentes que actualizan el nivel ($L_t$), la tendencia ($T_t$) y el factor estacional ($S_t$), utilizando constantes de suavización $\alpha, \beta, \gamma \in [0,1]$:
+
+A. Ecuación de Nivel ($L_t$):
+\begin{equation}
+L_t = \alpha \frac{y_t}{S_{t-s}} + (1 - \alpha)(L_{t-1} + T_{t-1})
+\end{equation}
+
+B. Ecuación de Tendencia ($T_t$):
+\begin{equation}
+T_t = \beta (L_t - L_{t-1}) + (1 - \beta)T_{t-1}
+\end{equation}
+
+C. Ecuación de Estacionalidad ($S_t$):
+\begin{equation}
+S_t = \gamma \frac{y_t}{L_t} + (1 - \gamma)S_{t-s}
+\end{equation}
+
+D. Proyección del Pronóstico ($F_{t+m}$):
+La demanda futura esperada para una patología $i$ en una semana dada se calcula proyectando $m$ períodos hacia el futuro:
+\begin{equation}
+D_i = F_{t+m} = (L_t + m T_t) S_{t-s+m}
+\end{equation}
+Donde $s = 52$ representa la longitud del ciclo estacional anual en semanas epidemiológicas, e $y_t$ es el valor real observado.
+
+\subsubsection{Fase de Optimización: Modelo de Programación Lineal Multiobjetivo}
+Una vez obtenida la demanda ajustada ($D_i$), se formula un modelo estático de asignación de recursos internos de un solo período (representativo de la semana epidemiológica bajo evaluación).
+
+\textbf{Índices del Sistema:}\\
+$i$: Patología epidémica ($i = 1: \text{Dengue}$, $i = 2: \text{Bronquiolitis}$, $i = 3: \text{Influenza}$).\\
+$r$: Recurso crítico ($r = 1: \text{Camas Grales.}$, $r = 2: \text{Camas UTI}$, $r = 3: \text{Horas Oxígeno/ARM}$, $r = 4: \text{Kits Hidratación}$, $r = 5: \text{Kits Respiratorios}$, $r = 6: \text{Horas Médico}$, $r = 7: \text{Horas Enfermería}$).
+
+\textbf{Variables de Decisión:}\\
+$V_{r,i} \in \mathbb{R}^+$: Cantidad del recurso crítico $r$ asignado a la patología $i$.\\
+$X_i \in \mathbb{Z}^+$: Cantidad total de pacientes con patología $i$ efectivamente atendidos.\\
+$F_i \in \mathbb{Z}^+$: Cantidad de pacientes con patología $i$ no atendidos (faltantes por saturación).
+
+\textbf{Parámetros:}\\
+$C_r$: Costo unitario de activación/consumo del recurso $r$.\\
+$P_i$: Penalización económica y social por cada paciente de tipo $i$ no atendido.\\
+$\mu_i$: Índice clínico de gravedad o letalidad relativa asociado a la patología $i$.\\
+$T_{i,r}$: Tasa de consumo tecnológico del recurso $r$ por cada paciente de tipo $i$.\\
+$K_{max\_r}$: Capacidad nominal total del recurso $r$ en la infraestructura hospitalaria.\\
+$B_r$: Carga base del recurso $r$ ocupada de forma constante por patologías habituales.\\
+$Presupuesto$: Fondo financiero máximo extraordinario asignado para la contingencia semanal.
+
+\textbf{2.3. Funciones Objetivo y Restricciones Estructurales}
+
+\textbf{Estructura Multiobjetivo:}\\
+Minimización de Costos Operativos y Penalizaciones ($Z_1$): Busca optimizar la eficiencia financiera minimizando el gasto en recursos adicionales y el impacto punitivo/social de dejar pacientes sin cobertura asistencial.
+\begin{equation}
+\min Z_1 = \sum_{r=1}^{7} \sum_{i=1}^{3} (C_r \cdot V_{r,i}) + \sum_{i=1}^{3} (P_i \cdot F_i)
+\end{equation}
+
+Maximización de la Atención Sanitaria Ponderada ($Z_2$): Resguarda el criterio ético-médico (triage algorítmico), maximizando el volumen de pacientes atendidos pero priorizando aquellos con patologías de mayor letalidad relativa ($\mu_i$).
+\begin{equation}
+\max Z_2 = \sum_{i=1}^{3} (\mu_i \cdot X_i)
+\end{equation}
+
+\textbf{Restricciones Operativas:}\\
+Garantía de Calidad e Integridad de la Prestación: Impide el fraccionamiento o asignación incompleta de recursos. Un paciente no está atendido si no recibe el paquete tecnológico completo exigido por protocolo.
+\begin{equation}
+V_{r,i} \ge T_{i,r} \cdot X_i \quad \forall r = 1 \dots 7, \quad \forall i = 1 \dots 3
+\end{equation}
+
+Capacidad Estructural Neta: Restringe el consumo de recursos al margen ocioso real de la institución, bloqueando la carga base histórica.
+\begin{equation}
+\sum_{i=1}^{3} V_{r,i} \le K_{max\_r} - B_r \quad \forall r = 1 \dots 7
+\end{equation}
+
+Balance Epidemiológico de Flujo: Conserva el flujo de pacientes en la guardia. Toda la demanda proyectada por la fase predictiva ($D_i$) debe ser clasificada matemáticamente como atendida o faltante.
+\begin{equation}
+X_i + F_i = D_i \quad \forall i = 1 \dots 3
+\end{equation}
+
+Sustentabilidad Presupuestaria Semanal: Limita el costo total de los recursos operativos asignados al techo presupuestario extraordinario de contingencia.
+\begin{equation}
+\sum_{r=1}^{7} \sum_{i=1}^{3} (C_r \cdot V_{r,i}) \le Presupuesto
+\end{equation}
+
+No Negatividad e Integridad:
+\begin{equation}
+V_{r,i} \ge 0 \quad \forall r = 1 \dots 7, \quad \forall i = 1 \dots 3
+\end{equation}
+\begin{equation}
+X_i, F_i \in \mathbb{Z}^+_0 \quad \forall i = 1 \dots 3
+\end{equation}
+
+% --- BIBLIOGRAFÍA EN UNA COLUMNA ---
+\clearpage
+\onecolumn
+\begin{thebibliography}{00}
+\bibitem{ref1} Ministerio de Salud Pública de Tucumán. (2024). Sala de situación epidemiológica. Dirección de Epidemiología.
+\bibitem{ref2} Abas, A., Ismail, S., \& Taib, S. M. (2022). Predicting dengue outbreak in Selangor using Holt-Winters models. International Journal of Academic Research in Business and Social Sciences, 12(1), 1186-1195.
+\bibitem{ref3} Universiti Teknologi MARA. (2021). Prediction of dengue outbreak: A comparison between ARIMA and Holt-Winters methods. ResearchGate.
+\bibitem{ref4} Wave, R. J. (2023). Operations research applications in healthcare systems: Resource allocation optimization models. Journal of Applied Analytics and Forecasting Research, 8(2), 45-60.
+\bibitem{ref5} Preprints.org. (2025). An optimization-based framework to dynamically schedule hospital beds in a pandemic. Preprints.
+\bibitem{ref6} Dirección de Investigación para la Salud. (2017). Agenda Nacional de Investigación en Salud Pública: Diagnóstico de Situación de Áreas de Vacancia en Investigación Operativa en Salud de Argentina. Ministerio de Salud de la Nación.
+\bibitem{ref7} Anderson, D. R., Sweeney, D. J., Williams, T. A., Camm, J. D., \& Martin, K. (2011). Métodos cuantitativos para los negocios (11.ª ed.). CENGAGE Learning.
+\bibitem{ref8} Bonomo, F., Durán, G., \& Marenco, J. (2020). Modelos de simulación y optimización para la gestión de recursos hospitalarios ante variaciones de demanda. Instituto de Cálculo, Universidad de Buenos Aires - CONICET.
+\bibitem{ref9} Ministerio de Salud de la Nación Argentina. (2023). Estrategia de Gestión Integrada para la Prevención y Control del Dengue. Dirección Nacional de Epidemiología y Análisis de Situación de Salud.
+\bibitem{ref10} Sistema Provincial de Salud de Tucumán (SIPROSA). (2024). Plan de contingencia y lineamientos operativos para la readecuación de recursos físicos ante brotes epidémicos. Ministerio de Salud Pública, Gobierno de Tucumán.
+\bibitem{ref11} Winston, W. L. (2005). Investigación de Operaciones: Aplicaciones y algoritmos (4.ª ed.). THOMSON.
+\bibitem{ref12} Instituto Nacional de Estadística y Censos [INDEC]. (2023). Censo Nacional de Población, Hogares y Viviendas 2022: Resultados definitivos. Indicadores demográficos por provincia.
+\bibitem{ref13} Ministerio de Salud de la Nación. (2024). Boletín Epidemiológico Nacional N° 702 - SE 17.
+\bibitem{ref14} Organización Mundial de la Salud [OMS]. (2023). Dengue y dengue grave: Datos y cifras.
+\bibitem{ref15} Organización Panamericana de la Salud [OPS]. (2022). Actualización Epidemiológica: Virus Respiratorio Sincitial (VSR) e Influenza en la Región de las Américas.
+\end{thebibliography}
+
+\end{document}
