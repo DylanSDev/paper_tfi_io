@@ -34,16 +34,16 @@
 \end{IEEEkeywords}
 
 \section{Fundamentación}
-Los sistemas de salud pública en Tucumán enfrentan tensiones extremas ante la coexistencia estacional de dengue, bronquiolitis e influenza, provocando la frecuente saturación hospitalaria y el desabastecimiento de insumos críticos (Ministerio de Salud Pública de Tucumán, 2024). Esta volatilidad epidemiológica exige pasar de una respuesta reactiva a una planificación sanitaria proactiva.
+Los sistemas de salud pública en Tucumán enfrentan tensiones extremas ante la coexistencia estacional de dengue, bronquiolitis e influenza, provocando la frecuente saturación hospitalaria y el desabastecimiento de insumos críticos \cite{ref1}. Esta volatilidad epidemiológica exige pasar de una respuesta reactiva a una planificación sanitaria proactiva.
 
-Para evitar el colapso, es vital anticipar la demanda de pacientes. El análisis de series temporales mediante la Suavización Exponencial de Holt-Winters ha demostrado ser altamente efectivo en la predicción de brotes infecciosos, capturando con precisión las tendencias y los marcados patrones estacionales (Abas et al., 2022; Universiti Teknologi MARA, 2021).
+Para evitar el colapso, es vital anticipar la demanda de pacientes. El análisis de series temporales mediante la Suavización Exponencial de Holt-Winters ha demostrado ser altamente efectivo en la predicción de brotes infecciosos, capturando con precisión las tendencias y los marcados patrones estacionales \cite{ref2, ref3}.
 
-Sin embargo, este pronóstico debe acompañarse de una gestión logística eficiente. La aplicación de la Investigación Operativa en sistemas de salud, mediante modelos de programación lineal multiobjetivo, permite optimizar la asignación de recursos escasos, mejorando la utilización de la infraestructura y reduciendo costos operativos al anticiparse a la saturación (Wave, 2023; Preprints.org, 2025).
+Sin embargo, este pronóstico debe acompañarse de una gestión logística eficiente. La aplicación de la Investigación Operativa en sistemas de salud, mediante modelos de programación lineal multiobjetivo, permite optimizar la asignación de recursos escasos, mejorando la utilización de la infraestructura y reduciendo costos operativos al anticiparse a la saturación \cite{ref4, ref5}.
 
 Por lo tanto, este trabajo se fundamenta en la sinergia de ambas herramientas. Los pronósticos de Holt-Winters estimarán la demanda futura, y un modelo de Programación Lineal Entera Mixta optimizará la asignación semanal de recursos hospitalarios finitos, priorizando la atención de los casos de mayor gravedad clínica para garantizar equidad, eficiencia y minimizar la mortalidad.
 
 \section{Objetivos}
-Ante la histórica ineficiencia distributiva del sistema sanitario y la consecuente saturación hospitalaria durante picos epidemiológicos, resulta imperativo adoptar herramientas de planificación proactiva que garanticen una atención equitativa y oportuna (Dirección de Investigación para la Salud, 2017). En respuesta a esta necesidad, se define:
+Ante la histórica ineficiencia distributiva del sistema sanitario y la consecuente saturación hospitalaria durante picos epidemiológicos, resulta imperativo adoptar herramientas de planificación proactiva que garanticen una atención equitativa y oportuna \cite{ref6}. En respuesta a esta necesidad, se define:
 
 \subsection{Objetivo Principal}
 Desarrollar un sistema de soporte de decisiones fundamentado en modelos de Investigación Operativa para optimizar la gestión logística y la asignación de recursos críticos en hospitales públicos de la provincia de Tucumán frente a la demanda estacional aguda por brotes de dengue, bronquiolitis e influenza.
@@ -71,25 +71,25 @@ Desarrollar un sistema de soporte de decisiones fundamentado en modelos de Inves
 
 \section{Marco Teórico}
 \begin{itemize}
-    \item \textbf{Pronóstico:} Técnica analítica de la Investigación Operativa que utiliza datos históricos y modelos matemáticos para proyectar escenarios futuros, reduciendo la incertidumbre del sistema (Anderson et al., 2011; Winston, 2005).
-    \item \textbf{Suavización Exponencial Triple (Holt-Winters):} Método que descompone y proyecta simultáneamente nivel, tendencia y estacionalidad. Es indispensable para estructurar alertas tempranas en enfermedades estacionales (Ministerio de Salud de la Nación Argentina, 2023).
-    \item \textbf{Investigación Operativa (IO):} Disciplina cuantitativa que optimiza el rendimiento de un sistema sujeto a restricciones, proveyendo el soporte analítico para readecuar recursos hospitalarios ante brotes (SIPROSA, 2024).
-    \item \textbf{Programación Lineal Entera Mixta (PLEM):} Técnica matemática de optimización sujeta a limitaciones lógicas, donde variables clave (como pacientes o camas) toman valores enteros estrictos (Bonomo, Durán, \& Marenco, 2020).
-    \item \textbf{Modelo Multiobjetivo:} Variante de optimización para resolver problemas con metas en conflicto directo, buscando un equilibrio entre minimizar costos operativos y maximizar la cobertura médica priorizada (Winston, 2005).
+    \item \textbf{Pronóstico:} Técnica analítica de la Investigación Operativa que utiliza datos históricos y modelos matemáticos para proyectar escenarios futuros, reduciendo la incertidumbre del sistema \cite{ref7, ref11}.
+    \item \textbf{Suavización Exponencial Triple (Holt-Winters):} Método que descompone y proyecta simultáneamente nivel, tendencia y estacionalidad. Es indispensable para estructurar alertas tempranas en enfermedades estacionales \cite{ref9}.
+    \item \textbf{Investigación Operativa (IO):} Disciplina cuantitativa que optimiza el rendimiento de un sistema sujeto a restricciones, proveyendo el soporte analítico para readecuar recursos hospitalarios ante brotes \cite{ref10}.
+    \item \textbf{Programación Lineal Entera Mixta (PLEM):} Técnica matemática de optimización sujeta a limitaciones lógicas, donde variables clave (como pacientes o camas) toman valores enteros estrictos \cite{ref8}.
+    \item \textbf{Modelo Multiobjetivo:} Variante de optimización para resolver problemas con metas en conflicto directo, buscando un equilibrio entre minimizar costos operativos y maximizar la cobertura médica priorizada \cite{ref11}.
 \end{itemize}
 
 \section{Marco Contextual}
 \subsection{Contexto Demográfico y Población de Riesgo}
-El modelo se enmarca en la provincia de Tucumán. Según datos del Censo Nacional 2022 (INDEC, 2023), de sus 1.703.186 habitantes, el 42\% depende de manera exclusiva del subsistema público de salud (SIPROSA). La segmentación etaria es fundamental para estimar la demanda potencial asimétrica ante el brote:
-\textit{[Tabla 1. Distribución demográfica de riesgo y dependencia del sistema público en Tucumán (Basado en INDEC, 2023)]}
+El modelo se enmarca en la provincia de Tucumán. Según datos del Censo Nacional 2022 \cite{ref12}, de sus 1.703.186 habitantes, el 42\% depende de manera exclusiva del subsistema público de salud (SIPROSA). La segmentación etaria es fundamental para estimar la demanda potencial asimétrica ante el brote:
+\textit{[Tabla 1. Distribución demográfica de riesgo y dependencia del sistema público en Tucumán (basado en \cite{ref12})]}
 
 \subsection{Escenario de Máxima Tensión Epidemiológica (Referencia Histórica)}
 Para parametrizar el comportamiento de la demanda ($D_i$) en crisis, se toma el escenario histórico del ciclo 2023-2024 en Tucumán, donde confluyeron el mayor brote histórico de dengue y un aumento temprano de Infecciones Respiratorias Agudas Bajas (IRAB). La saturación máxima se registró entre las Semanas Epidemiológicas (SE) 15 y 19:
-\textit{[Tabla 2. Registro histórico del pico de crisis multi epidémica en Tucumán (Valores de referencia basados en el Boletín Epidemiológico Nacional, 2024)]}
+\textit{[Tabla 2. Registro histórico del pico de crisis multi epidémica en Tucumán (valores de referencia basados en \cite{ref13})]}
 
 \subsection{Parámetros Clínicos: Hospitalización, Severidad y Letalidad}
 La conversión de casos en requerimientos de insumos emplea tasas de consumo tecnológico ($T_{i,r}$) y ponderadores clínicos de gravedad ($\mu_i$), estructurados bajo directrices de la Organización Mundial de la Salud (OMS) y la Organización Panamericana de la Salud (OPS). El modelo filtra la demanda bruta según tasas de hospitalización esperadas e índices de letalidad:
-\textit{[Tabla 3. Indicadores clínicos de severidad y requerimientos asistenciales (Basado en OMS y OPS)]}
+\textit{[Tabla 3. Indicadores clínicos de severidad y requerimientos asistenciales (basado en \cite{ref14, ref15})]}
 
 \subsection{Operativización Financiera y Restricciones de Capacidad}
 Los efectores de tercer nivel del SIPROSA operan con capacidad instalada rígida. El modelo calcula la capacidad neta deduciendo la carga base histórica ocupada por patologías no epidémicas (entre 60\% y 70\% de camas). Por su parte, los costos unitarios ($C_r$) y el presupuesto extraordinario semanal ($PresupuestoMax$) se ingresan dinámicamente según valores vigentes de mercado y asignaciones ministeriales, garantizando la aplicabilidad temporal del modelo al calcular la frontera de eficiencia óptima.
@@ -128,16 +128,16 @@ El modelo de optimización lineal entera mixta está diseñado bajo un enfoque m
 
 \begin{thebibliography}{00}
     \bibitem{ref1} Ministerio de Salud Pública de Tucumán. (2024). Sala de situación epidemiológica. Dirección de Epidemiología.
-    \bibitem{ref2} Abas, A., Ismail, S., \& Taib, S. M. (2022). Predicting dengue outbreak in Selangor using Holt-Winters models. International Journal of Academic Research in Business and Social Sciences, 12(1), 1186-1195.
-    \bibitem{ref3} Universiti Teknologi MARA. (2021). Prediction of dengue outbreak: A comparison between ARIMA and Holt-Winters methods. ResearchGate.
-    \bibitem{ref4} Wave, R. J. (2023). Operations research applications in healthcare systems: Resource allocation optimization models. Journal of Applied Analytics and Forecasting Research, 8(2), 45-60.
-    \bibitem{ref5} Preprints.org. (2025). An optimization-based framework to dynamically schedule hospital beds in a pandemic. Preprints.
+    \bibitem{ref2} Mahmud, N., Ali, N. A., Pazil, N. S. M., \& Jamaluddin, S. H. (2022). Predicting dengue outbreak in Selangor using Holt-Winters models. International Journal of Academic Research in Business and Social Sciences, 12(1).
+    \bibitem{ref3} Mahmud, N., \& Pazil, N. S. M. (2021). Prediction of dengue outbreak: A comparison between ARIMA and Holt-Winters methods. Universiti Teknologi MARA.
+    \bibitem{ref4} Shah, D., Marathe, S. A., \& Mehrotra, M. (2023). Operations research applications in healthcare systems: Resource allocation optimization models. Journal of Applied Analytics and Forecasting Research.
+    \bibitem{ref5} Shams Eddin, M., \& El Hajj, H. (2025). An optimization-based framework to dynamically schedule hospital beds in a pandemic. Preprints.
     \bibitem{ref6} Dirección de Investigación para la Salud. (2017). Agenda Nacional de Investigación en Salud Pública: Diagnóstico de Situación de Áreas de Vacancia en Investigación Operativa en Salud de Argentina. Ministerio de Salud de la Nación.
     \bibitem{ref7} Anderson, D. R., Sweeney, D. J., Williams, T. A., Camm, J. D., \& Martin, K. (2011). Métodos cuantitativos para los negocios (11.ª ed.). CENGAGE Learning.
-    \bibitem{ref8} Bonomo, F., Durán, G., \& Marenco, J. (2020). Modelos de simulación y optimización para la gestión de recursos hospitalarios ante variaciones de demanda. Instituto de Cálculo, Universidad de Buenos Aires - CONICET.
+    \bibitem{ref11} Winston, W. L. (2005). Investigación de Operaciones: Aplicaciones y algoritmos (4.ª ed.). THOMSON.
     \bibitem{ref9} Ministerio de Salud de la Nación Argentina. (2023). Estrategia de Gestión Integrada para la Prevención y Control del Dengue. Dirección Nacional de Epidemiología y Análisis de Situación de Salud.
     \bibitem{ref10} Sistema Provincial de Salud de Tucumán (SIPROSA). (2024). Plan de contingencia y lineamientos operativos para la readecuación de recursos físicos ante brotes epidémicos. Ministerio de Salud Pública, Gobierno de Tucumán.
-    \bibitem{ref11} Winston, W. L. (2005). Investigación de Operaciones: Aplicaciones y algoritmos (4.ª ed.). THOMSON.
+    \bibitem{ref8} Bonomo, F., Durán, G., \& Marenco, J. (2020). Modelos de simulación y optimización para la gestión de recursos hospitalarios ante variaciones de demanda. Instituto de Cálculo, Universidad de Buenos Aires - CONICET.
     \bibitem{ref12} Instituto Nacional de Estadística y Censos [INDEC]. (2023). Censo Nacional de Población, Hogares y Viviendas 2022: Resultados definitivos. Indicadores demográficos por provincia.
     \bibitem{ref13} Ministerio de Salud de la Nación. (2024). Boletín Epidemiológico Nacional N° 702 - SE 17.
     \bibitem{ref14} Organización Mundial de la Salud [OMS]. (2023). Dengue y dengue grave: Datos y cifras.
