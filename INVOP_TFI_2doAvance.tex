@@ -8,41 +8,22 @@
 \usepackage{xcolor}
 \usepackage{cite}
 
+\title{Optimización de la gestión de recursos críticos hospitalarios: integración de pronósticos epidemiológicos y programación lineal ante brotes estacionales\\
+\large Trabajo Final Integrador: Segundo Avance}
+
+\author{
+    \IEEEauthorblockN{Bellor Maria Eugenia, Diaz Dylan Santiago, Jimenez Fernando Emanuel, Veliz Ignacio Martín, Zato Sosa Celina Abigail}
+    \IEEEauthorblockA{Universidad Tecnológica Nacional\\
+    Facultad Regional Tucumán\\
+    Ingeniería en Sistemas de Información\\
+    Asignatura: Investigación Operativa\\
+    Profesores: Dra. Ing. Gramajo Guadalupe, Ing. Rojas Cristina, Ing. Fraga Alvaro\\
+    Tucumán, Junio de 2026}
+}
+
 \begin{document}
 
-% --- PORTADA EN UNA COLUMNA ---
-\onecolumn
-\begin{titlepage}
-    \centering
-    \vspace*{2cm}
-    {\Huge\bfseries Optimización de la gestión de recursos críticos hospitalarios: integración de pronósticos epidemiológicos y programación lineal ante brotes estacionales\par}
-    \vspace{2cm}
-    {\Large\textbf{Trabajo Final Integrador: Segundo Avance}\par}
-    \vspace{2cm}
-    {\large \textbf{Autores:}\par}
-    \vspace{0.5cm}
-    Bellor Maria Eugenia\\
-    Diaz Dylan Santiago\\
-    Jimenez Fernando Emanuel\\
-    Veliz Ignacio Martín\\
-    Zato Sosa Celina Abigail\par
-    \vspace{2.5cm}
-    {\large \textbf{Universidad Tecnológica Nacional}\\
-    Facultad Regional Tucumán\\
-    Ingeniería en Sistemas de Información\par}
-    \vspace{1cm}
-    {\large \textbf{Asignatura:} Investigación Operativa\par}
-    \vspace{1cm}
-    {\large \textbf{Profesores:}\\
-    Dra. Ing. Gramajo Guadalupe\\
-    Ing. Rojas Cristina\\
-    Ing. Fraga Alvaro\par}
-    \vfill
-    {\large Tucumán, Abril de 2026\par}
-\end{titlepage}
-
-% --- RESTAURAR A DOS COLUMNAS PARA EL DESARROLLO ---
-\twocolumn
+\maketitle
 
 \begin{abstract}
 Este trabajo propone un sistema de soporte de decisiones mediante Investigación Operativa para optimizar la logística en hospitales públicos de Tucumán ante brotes estacionales de dengue, bronquiolitis e influenza. La metodología consta de dos fases: primero, un modelo predictivo (Suavización Exponencial Triple Holt-Winters) para proyectar la demanda semanal según tendencia y estacionalidad histórica. Segundo, un modelo de Programación Lineal Entera Mixta Multiobjetivo que optimiza la asignación semanal de siete recursos críticos (camas, UTI, insumos y personal). El algoritmo resuelve la tensión entre minimizar costos/penalizaciones y maximizar la atención priorizando casos de alta letalidad, garantizando eficiencia operativa y rigor ético-médico bajo condiciones de alta presión epidemiológica.
@@ -213,9 +194,6 @@ V_{r,i} \ge 0 \quad \forall r = 1 \dots 7, \quad \forall i = 1 \dots 3
 X_i, F_i \in \mathbb{Z}^+_0 \quad \forall i = 1 \dots 3
 \end{equation}
 
-% --- BIBLIOGRAFÍA EN UNA COLUMNA ---
-\clearpage
-\onecolumn
 \begin{thebibliography}{00}
 \bibitem{ref1} Ministerio de Salud Pública de Tucumán. (2024). Sala de situación epidemiológica. Dirección de Epidemiología.
 \bibitem{ref2} Abas, A., Ismail, S., \& Taib, S. M. (2022). Predicting dengue outbreak in Selangor using Holt-Winters models. International Journal of Academic Research in Business and Social Sciences, 12(1), 1186-1195.
