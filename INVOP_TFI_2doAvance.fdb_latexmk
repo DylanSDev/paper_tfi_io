@@ -1,7 +1,7 @@
 # Fdb version 4
-["pdflatex"] 1782228536.74404 "c:/Users/NEW GAME/Desktop/Mia Carpeta/0 - UTN/4 - Cursado 2026/1-Materias/2-Investigación Operativa/5 - TFI/2do-Avance/1.DocFormatoLatex/INVOP_TFI_2doAvance.tex" "INVOP_TFI_2doAvance.pdf" "INVOP_TFI_2doAvance" 1782228537.60495 0
+["pdflatex"] 1782230207.44231 "c:/Users/NEW GAME/Desktop/Mia Carpeta/0 - UTN/4 - Cursado 2026/1-Materias/2-Investigación Operativa/5 - TFI/2do-Avance/1.DocFormatoLatex/INVOP_TFI_2doAvance.tex" "INVOP_TFI_2doAvance.pdf" "INVOP_TFI_2doAvance" 1782230208.22928 0
   "C:/Users/NEW" 1743826554 18971 872332845fbdbb0705338799a593422f ""
-  "C:/Users/NEW GAME/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1782228464 82507 a9eef8696c92627b87e9975edea03b2a ""
+  "C:/Users/NEW GAME/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1782230115 82507 a9eef8696c92627b87e9975edea03b2a ""
   "C:/Users/NEW GAME/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1782228438 13334975 3168f5e94c288b9d630d40f6a7764906 ""
   "C:/Users/NEW GAME/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc" 1458473887 4993 80dc9bab7f31fb78a000ccfed0e27cab ""
   "C:/Users/NEW GAME/AppData/Local/Programs/MiKTeX/fonts/tfm/adobe/times/ptmb7t.tfm" 1136783054 2172 fd0c924230362ff848a33632ed45dc23 ""
@@ -21,14 +21,10 @@
   "C:/Users/NEW GAME/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/symbols/msbm10.tfm" 1233951854 908 2921f8a10601f252058503cc6570e581 ""
   "C:/Users/NEW GAME/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/symbols/msbm5.tfm" 1233951854 940 75ac932a52f80982a9f8ea75d03a34cf ""
   "C:/Users/NEW GAME/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/symbols/msbm7.tfm" 1233951854 940 228d6584342e91276bf566bcf9716b83 ""
-  "C:/Users/NEW GAME/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb" 1247596667 30251 6afa5cb1d0204815a708a080681d4674 ""
   "C:/Users/NEW GAME/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1247596667 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
   "C:/Users/NEW GAME/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb" 1247596667 36281 c355509802a035cadc5f15869451dcee ""
   "C:/Users/NEW GAME/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1247596667 35752 024fb6c41858982481f6968b5fc26508 ""
   "C:/Users/NEW GAME/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb" 1247596667 32762 7fee39e011c23b3589931effd97b9702 ""
-  "C:/Users/NEW GAME/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1247596667 32569 5e5ddc8df908dea60932f3c484a54c0d ""
-  "C:/Users/NEW GAME/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb" 1247596666 32716 08e384dc442464e7285e891af9f45947 ""
-  "C:/Users/NEW GAME/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb" 1247596673 34694 870c211f62cb72718a00e353f14f254d ""
   "C:/Users/NEW GAME/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb" 1136864148 44729 fea0975e20ec51c992338362f05f1146 ""
   "C:/Users/NEW GAME/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb" 1136864148 44656 0cbca70e0534538582128f6b54593cca ""
   "C:/Users/NEW GAME/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb" 1136864148 46026 687528a208fbfc1f00832bb96cccebbb ""
@@ -75,10 +71,10 @@
   "C:/Users/NEW GAME/AppData/Local/Programs/MiKTeX/tex/latex/psnfss/ot1ptm.fd" 1585253778 1007 15056f4a61917ceed3a44e4ac11fcc52 ""
   "C:/Users/NEW GAME/AppData/Local/Programs/MiKTeX/tex/latex/psnfss/ts1ptm.fd" 1585253778 653 96f56dc5d1ef1fe1121f1cfeec70ee0c ""
   "C:/Users/NEW GAME/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1729265222 55384 b454dec21c2d9f45ec0b793f0995b992 ""
-  "INVOP_TFI_2doAvance.aux" 1782228537 2492 95aad9e07334f9192b2ffd24fd0e8cab "pdflatex"
-  "INVOP_TFI_2doAvance.tex" 1782228536 20766 0dd8fac8ef7467609721605e6deb78da ""
+  "INVOP_TFI_2doAvance.aux" 1782230208 2769 e167c1757a6049c006f2be171eaa4ab2 "pdflatex"
+  "INVOP_TFI_2doAvance.tex" 1782230205 16947 2fd9fb1671b2eca5f2a0a856a7b6557e ""
   "c:/Users/NEW" 1743826554 18971 872332845fbdbb0705338799a593422f ""
-  "c:/Users/NEW GAME/Desktop/Mia Carpeta/0 - UTN/4 - Cursado 2026/1-Materias/2-Investigación Operativa/5 - TFI/2do-Avance/1.DocFormatoLatex/INVOP_TFI_2doAvance.tex" 1782228536 20766 0dd8fac8ef7467609721605e6deb78da ""
+  "c:/Users/NEW GAME/Desktop/Mia Carpeta/0 - UTN/4 - Cursado 2026/1-Materias/2-Investigación Operativa/5 - TFI/2do-Avance/1.DocFormatoLatex/INVOP_TFI_2doAvance.tex" 1782230205 16947 2fd9fb1671b2eca5f2a0a856a7b6557e ""
   (generated)
   "INVOP_TFI_2doAvance.aux"
   "INVOP_TFI_2doAvance.log"
