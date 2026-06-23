@@ -7,6 +7,7 @@
 \usepackage{textcomp}
 \usepackage{xcolor}
 \usepackage{cite}
+\usepackage{array}
 
 \title{Optimización de la gestión de recursos críticos hospitalarios: integración de pronósticos epidemiológicos y programación lineal ante brotes estacionales\\[0.5em]
 \large Trabajo Final Integrador: Segundo Avance}
@@ -77,15 +78,67 @@ Desarrollar un sistema de soporte de decisiones fundamentado en modelos de Inves
 \section{Marco Contextual}
 \subsection{Contexto Demográfico y Población de Riesgo}
 El modelo se enmarca en la provincia de Tucumán. Según datos del Censo Nacional 2022 \cite{ref12}, de sus 1.703.186 habitantes, el 42\% depende de manera exclusiva del subsistema público de salud (SIPROSA). La segmentación etaria es fundamental para estimar la demanda potencial asimétrica ante el brote:
-\textit{[Tabla 1. Distribución demográfica de riesgo y dependencia del sistema público en Tucumán (basado en \cite{ref12})]}
+\begin{table}[htbp]
+\caption{Distribución demográfica de riesgo y dependencia del sistema público en Tucumán (basado en \cite{ref12})}
+\label{tab:demografia}
+\centering
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|>{\raggedright\arraybackslash}m{1.8cm}|>{\raggedright\arraybackslash}m{1.8cm}|>{\raggedright\arraybackslash}m{1.4cm}|>{\raggedright\arraybackslash}m{2.1cm}|}
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{1.8cm}|}{\textbf{Grupo Poblacional}} & \multicolumn{1}{>{\centering\arraybackslash}m{1.8cm}|}{\textbf{Patología de Mayor Riesgo}} & \multicolumn{1}{>{\centering\arraybackslash}m{1.4cm}|}{\textbf{Población Total (Tucumán)}} & \multicolumn{1}{>{\centering\arraybackslash}m{2.1cm}|}{\textbf{Demanda Potencial (Dep. Pública $\approx$42\%)}}\\
+\hline
+Primera Infancia (0 a 4 años) & Bronquiolitis (VSR) & $\approx$ 142.500 hab. & $\approx$ 59.850 lactantes y niños \\
+\hline
+Población General (15 a 64 años) & Dengue & $\approx$ 1.085.000 hab. & $\approx$ 455.700 jóvenes y adultos \\
+\hline
+Adultos Mayores (65 años y más) & Influenza A / Neumonía & $\approx$ 186.200 hab. & $\approx$ 78.200 adultos mayores \\
+\hline
+\end{tabular}
+\end{table}
 
 \subsection{Escenario de Máxima Tensión Epidemiológica (Referencia Histórica)}
 Para parametrizar el comportamiento de la demanda ($D_i$) en crisis, se toma el escenario histórico del ciclo 2023-2024 en Tucumán, donde confluyeron el mayor brote histórico de dengue y un aumento temprano de Infecciones Respiratorias Agudas Bajas (IRAB). La saturación máxima se registró entre las Semanas Epidemiológicas (SE) 15 y 19:
-\textit{[Tabla 2. Registro histórico del pico de crisis multi epidémica en Tucumán (valores de referencia basados en \cite{ref13})]}
+\begin{table}[htbp]
+\caption{Registro histórico del pico de crisis multi-epidémica en Tucumán (valores de referencia basados en \cite{ref13})}
+\label{tab:pico_critico}
+\centering
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|>{\raggedright\arraybackslash}m{1.7cm}|>{\raggedright\arraybackslash}m{1.3cm}|>{\raggedright\arraybackslash}m{2.0cm}|>{\raggedright\arraybackslash}m{2.0cm}|}
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{1.7cm}|}{\textbf{SE (Pico Crítico)}} & \multicolumn{1}{>{\centering\arraybackslash}m{1.3cm}|}{\textbf{Casos Dengue}} & \multicolumn{1}{>{\centering\arraybackslash}m{2.0cm}|}{\textbf{Bronquiolitis ($<$2 años)}} & \multicolumn{1}{>{\centering\arraybackslash}m{2.0cm}|}{\textbf{ETI / Influenza}}\\
+\hline
+SE 15 (Med. Abril) & 6.840 & 185 & 210 \\
+\hline
+SE 16 (Fin Abril) & 7.120 & 250 & 285 \\
+\hline
+SE 17 (Inic. Mayo) & 5.300 & 410 & 360 \\
+\hline
+SE 18 (Med. Mayo) & 3.250 & 580 & 490 \\
+\hline
+SE 19 (Fin Mayo) & 1.800 & 695 & 620 \\
+\hline
+\end{tabular}
+\end{table}
 
 \subsection{Parámetros Clínicos: Hospitalización, Severidad y Letalidad}
 La conversión de casos en requerimientos de insumos emplea tasas de consumo tecnológico ($T_{i,r}$) y ponderadores clínicos de gravedad ($\mu_i$), estructurados bajo directrices de la Organización Mundial de la Salud (OMS) y la Organización Panamericana de la Salud (OPS). El modelo filtra la demanda bruta según tasas de hospitalización esperadas e índices de letalidad:
-\textit{[Tabla 3. Indicadores clínicos de severidad y requerimientos asistenciales (basado en \cite{ref14, ref15})]}
+\begin{table}[htbp]
+\caption{Indicadores clínicos de severidad y requerimientos asistenciales (basado en \cite{ref14, ref15})}
+\label{tab:indicadores_clinicos}
+\centering
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|>{\raggedright\arraybackslash}m{1.5cm}|>{\raggedright\arraybackslash}m{1.8cm}|>{\raggedright\arraybackslash}m{1.8cm}|>{\raggedright\arraybackslash}m{2.1cm}|}
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{1.5cm}|}{\textbf{Patología ($i$)}} & \multicolumn{1}{>{\centering\arraybackslash}m{1.8cm}|}{\textbf{Hospitalización (Camas)}} & \multicolumn{1}{>{\centering\arraybackslash}m{1.8cm}|}{\textbf{Cuidados Críticos (UTI/ARM)}} & \multicolumn{1}{>{\centering\arraybackslash}m{2.1cm}|}{\textbf{Prioridad / Letalidad ($\mu_i$)}}\\
+\hline
+1. Dengue & 5\% - 7\% (Crítica / Alarma) & $<$ 1\% (Dengue Grave) & Bajo / Mod. (Prioridad: Hidratación) \\
+\hline
+2. Bronquiolitis (VSR) & 10\% - 15\% (Hipoxemia) & 3\% - 5\% (UTI) & Alto (Riesgo pediátrico rápido) \\
+\hline
+3. Influenza A / ETI & 8\% - 12\% (Riesgo) & 4\% - 6\% (Insuf. Resp.) & Muy Alto (Mortalidad adultos mayores) \\
+\hline
+\end{tabular}
+\end{table}
 
 \subsection{Operativización Financiera y Restricciones de Capacidad}
 Los efectores de tercer nivel del SIPROSA operan con capacidad instalada rígida. El modelo calcula la capacidad neta deduciendo la carga base histórica ocupada por patologías no epidémicas (entre 60\% y 70\% de camas). Por su parte, los costos unitarios ($C_r$) y el presupuesto extraordinario semanal ($PresupuestoMax$) se ingresan dinámicamente según valores vigentes de mercado y asignaciones ministeriales, garantizando la aplicabilidad temporal del modelo al calcular la frontera de eficiencia óptima.
