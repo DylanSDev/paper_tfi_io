@@ -16,8 +16,8 @@
     \IEEEauthorblockN{Bellor Maria E., Diaz Dylan S., Jimenez Fernando E., Veliz Ignacio M., Zato Sosa Celina A.}
     \IEEEauthorblockA{Universidad Tecnológica Nacional, Facultad Regional Tucumán\\
     Investigación Operativa\\
-    \textbf{Profesores:} Dra. Ing. Gramajo Guadalupe, Ing. Rojas Cristina, Ing. Fraga Alvaro\\
-    Tucumán, Abril de 2026}
+    \textbf{Profesores:} Dra. Gramajo Guadalupe, Ing. Rojas Cristina, Ing. Fraga Alvaro\\
+    Tucumán, Junio de 2026}
 }
 
 \begin{document}
@@ -35,7 +35,7 @@
 \section{Fundamentación}
 Los sistemas de salud pública en Tucumán enfrentan tensiones extremas ante la coexistencia estacional de dengue, bronquiolitis e influenza, provocando la frecuente saturación hospitalaria y el desabastecimiento de insumos críticos \cite{ref1}. Esta volatilidad epidemiológica exige pasar de una respuesta reactiva a una planificación sanitaria proactiva.
 
-Para evitar el colapso, es vital anticipar la demanda de pacientes. El análisis de series temporales mediante la Suavización Exponencial de Holt-Winters ha demostrado ser altamente efectivo en la predicción de brotes infecciosos, capturando con precisión las tendencias y los marcados patrones estacionales \cite{ref2, ref3}.
+Para evitar el colapso, es vital anticipar la demanda de pacientes. El análisis de series temporales mediante la Suavización Exponencial Triple de Holt-Winters (variante Multiplicativa) ha demostrado ser altamente efectivo en la predicción de brotes infecciosos. Su elección se justifica en que la amplitud de los contagios masivos estacionales de dengue, bronquiolitis e influenza crece proporcionalmente al nivel general de la epidemia, permitiendo capturar de manera precisa las tendencias y los marcados patrones estacionales \cite{ref2, ref3}.
 
 Sin embargo, este pronóstico debe acompañarse de una gestión logística eficiente. La aplicación de la Investigación Operativa en sistemas de salud, mediante modelos de programación lineal multiobjetivo, permite optimizar la asignación de recursos escasos, mejorando la utilización de la infraestructura y reduciendo costos operativos al anticiparse a la saturación \cite{ref4, ref5}.
 
@@ -76,6 +76,31 @@ Desarrollar un sistema de soporte de decisiones fundamentado en modelos de Inves
     \item \textbf{Programación Lineal Entera Mixta (PLEM):} Técnica matemática de optimización sujeta a limitaciones lógicas, donde variables clave (como pacientes o camas) toman valores enteros estrictos \cite{ref8}.
     \item \textbf{Modelo Multiobjetivo:} Variante de optimización para resolver problemas con metas en conflicto directo, buscando un equilibrio entre minimizar costos operativos y maximizar la cobertura médica priorizada \cite{ref11}.
 \end{itemize}
+
+\subsection{Formulación Matemática de Holt-Winters Multiplicativo}
+El modelo de Suavización Exponencial Triple descompone la serie temporal en tres componentes mediante las siguientes ecuaciones de estado actualizadas semanalmente:
+\begin{equation}
+    L_t = \alpha \frac{y_t}{S_{t-s}} + (1 - \alpha) (L_{t-1} + T_{t-1})
+\end{equation}
+donde $L_t$ representa el nivel base, $y_t$ el valor real observado y $S_{t-s}$ el factor estacional del año previo. La tendencia secular $T_t$ se actualiza como:
+\begin{equation}
+    T_t = \beta (L_t - L_{t-1}) + (1 - \beta) T_{t-1}
+\end{equation}
+El factor de estacionalidad multiplicativo $S_t$ se calcula mediante:
+\begin{equation}
+    S_t = \gamma \frac{y_t}{L_t} + (1 - \gamma) S_{t-s}
+\end{equation}
+Finalmente, la proyección de la demanda esperada para un horizonte futuro $m$ se formula como:
+\begin{equation}
+    D_i = F_{t+m} = (L_t + m T_t) S_{t-s+m}
+\end{equation}
+Para cuantificar la desviación y precisión de las proyecciones frente a los valores reales, se computan el Error Absoluto ($EA_t$) y la Suma de Errores Cuadráticos ($SEC$):
+\begin{equation}
+    EA_t = |y_t - F_t|
+\end{equation}
+\begin{equation}
+    SEC = \sum_{t} (y_t - F_t)^2
+\end{equation}
 
 \section{Marco Contextual}
 \subsection{Contexto Demográfico y Población de Riesgo}
@@ -133,11 +158,11 @@ La conversión de casos en requerimientos de insumos emplea tasas de consumo tec
         \hline
         \multicolumn{1}{|>{\centering\arraybackslash}m{1.5cm}|}{\textbf{Patología ($i$)}} & \multicolumn{1}{>{\centering\arraybackslash}m{1.8cm}|}{\textbf{Hosp. (Camas)}} & \multicolumn{1}{>{\centering\arraybackslash}m{1.8cm}|}{\textbf{Cuidados Críticos (UTI/ARM)}} & \multicolumn{1}{>{\centering\arraybackslash}m{2.1cm}|}{\textbf{Prioridad / Letalidad ($\mu_i$)}} \\
         \hline
-        1. Dengue                                                                         & 5\% - 7\% (Crítica / Alarma)                                                             & $<$ 1\% (Dengue Grave)                                                                       & Bajo / Mod. (Prioridad: Hidratación)                                                             \\
+        1. Dengue                                                                         & 5\% - 7\% (Crítica / Alarma)                                                   & $<$ 1\% (Dengue Grave)                                                                       & Bajo / Mod. (Prioridad: Hidratación)                                                             \\
         \hline
-        2. Bronquiolitis (VSR)                                                            & 10\% - 15\% (Hipoxemia)                                                                  & 3\% - 5\% (UTI)                                                                              & Alto (Riesgo pediátrico rápido)                                                                  \\
+        2. Bronquiolitis (VSR)                                                            & 10\% - 15\% (Hipoxemia)                                                        & 3\% - 5\% (UTI)                                                                              & Alto (Riesgo pediátrico rápido)                                                                  \\
         \hline
-        3. Influenza A / ETI                                                              & 8\% - 12\% (Riesgo)                                                                      & 4\% - 6\% (Insuf. Resp.)                                                                     & Muy Alto (Mortalidad adultos mayores)                                                            \\
+        3. Influenza A / ETI                                                              & 8\% - 12\% (Riesgo)                                                            & 4\% - 6\% (Insuf. Resp.)                                                                     & Muy Alto (Mortalidad adultos mayores)                                                            \\
         \hline
     \end{tabular}
 \end{table}
@@ -149,13 +174,26 @@ Los efectores de tercer nivel del SIPROSA operan con capacidad instalada rígida
 Para viabilizar la aplicación del marco metodológico propuesto, se requiere la parametrización sistemática tanto de la fase predictiva como de la fase de optimización lineal. A continuación, se detallan y contextualizan los parámetros clave que gobiernan ambos modelos.
 
 \subsubsection{Parámetros de la Fase Predictiva (Suavización Exponencial Triple)}
-La proyección de la demanda epidemiológica mediante el modelo multiplicativo de Holt-Winters se parametriza mediante:
+El sistema predictivo opera bajo los siguientes índices, horizontes y constantes:
 \begin{itemize}
-    \item \textbf{Constante de nivel ($\alpha$):} Controla la ponderación de los datos recientes frente al histórico suavizado, permitiendo la adaptación rápida ante oscilaciones agudas de la demanda.
-    \item \textbf{Constante de tendencia ($\beta$):} Ajusta el factor de crecimiento o decrecimiento de la serie temporal, crítico para detectar la fase exponencial de un brote.
-    \item \textbf{Constante de estacionalidad ($\gamma$):} Modula la adaptación de las variaciones cíclicas de forma independiente a la tendencia.
-    \item \textbf{Periodicidad ($s = 52$ semanas) y horizonte ($m = 1$ semana):} Parámetros temporales que definen el ciclo anual y el periodo logístico de planificación operativa.
+    \item $t$: Índice temporal de la semana epidemiológica específica en la serie ($t = 1, 2, \dots, n$).
+    \item $i$: Patología bajo análisis (donde $i=1$ es Dengue, $i=2$ es Bronquiolitis y $i=3$ es Influenza).
+    \item $s$: Longitud del ciclo estacional anual ($s = 52$ semanas).
+    \item $m$: Horizonte temporal de pronóstico futuro.
+    \item Constantes de suavizamiento optimizadas en el intervalo $[0,1]$: de nivel ($\alpha$), de tendencia ($\beta$) y de estacionalidad ($\gamma$).
 \end{itemize}
+
+\subsubsection{Criterio de Selección de Ciclos Históricos y Ventanas Temporales}
+La delimitación de las ventanas de datos históricos para alimentar el modelo responde a las características biológicas y de transmisión de cada patología:
+\begin{itemize}
+    \item \textbf{Dengue (Ciclos 2023--2024):} Se limitó a este periodo debido a que representó el evento de máxima crisis sanitaria en la historia de Tucumán. Incorporar años previos de baja circulación endémica distorsionaría la estacionalidad y restaría capacidad de alerta temprana ante brotes agudos y de comportamiento vectorial altamente dependiente de cepas e indicadores climáticos.
+    \item \textbf{Bronquiolitis e Influenza (Ciclos 2023--2025):} Se empleó una ventana de tres años. Estas patologías presentan un comportamiento endoepidémico invernal regular y cíclico, por lo que una muestra más amplia asegura la estabilidad estadística necesaria para modelar las Infecciones Respiratorias Agudas Bajas (IRAB).
+\end{itemize}
+
+\subsubsection{Origen de Datos y Digitalización de Gráficos}
+Los datos cuantitativos semanales reales ($y_t$) se obtuvieron de los reportes oficiales de la sala de situación epidemiológica del SIPROSA y de los Boletines Epidemiológicos Nacionales, cubriendo desde marzo de 2023 hasta enero de 2026. 
+
+Debido a que múltiples reportes históricos solo presentaban las curvas epidemiológicas en formato gráfico no editable (PDFs escaneados), se utilizó la herramienta digitalizadora \textbf{WebPlotDigitizer} para realizar una calibración de ejes cartesianos y extraer con precisión milimétrica las coordenadas numéricas de casos semanales reales.
 
 \subsubsection{Parámetros y Funciones Objetivo de la Fase de Optimización (Programación Lineal Entera Mixta Multiobjetivo)}
 El modelo de optimización lineal entera mixta está diseñado bajo un enfoque multiobjetivo para balancear la sustentabilidad presupuestaria y la efectividad socio-sanitaria en la asignación de recursos críticos.
@@ -176,6 +214,70 @@ El modelo de optimización lineal entera mixta está diseñado bajo un enfoque m
     \item \textbf{Ponderador clínico de gravedad ($\mu_i$):} Índice de letalidad o criticidad de la patología $i$ basado en el triage de la OMS/OPS.
     \item \textbf{Presupuesto disponible ($Presupuesto$):} Fondo financiero máximo extraordinario asignado semanalmente para la contingencia sanitaria.
 \end{itemize}
+
+\section{Modelo simbólico}
+
+\section{Resolución}
+
+\subsection{Fase Predictiva: Resultados y Ajuste del Pronóstico}
+Para hallar la combinación óptima de las constantes de suavizamiento ($\alpha, \beta, \gamma$), se empleó el Solver de Microsoft Excel, configurando como celda objetivo la minimización de la Suma de Errores Cuadráticos ($SEC$) sobre los datos históricos. 
+
+El modelo de Holt-Winters Multiplicativo logró capturar las dinámicas específicas de cada patología:
+\begin{itemize}
+    \item \textbf{Dengue:} Mostró un comportamiento altamente explosivo y concentrado en verano y otoño, con factores estacionales muy marcados que multiplican el nivel base, típico de un brote vectorial agudo.
+    \item \textbf{Bronquiolitis:} Evidenció picos predecibles durante los meses de invierno con baja dispersión interanual, facilitando la planificación de camas pediátricas y kits de ventilación respiratoria.
+    \item \textbf{Influenza:} Reveló una circulación viral sostenida a lo largo del año con picos invernales superpuestos, permitiendo una proyección estable útil para prever horas de personal de salud y consumo de oxígeno.
+\end{itemize}
+
+A continuación se presentan los gráficos que comparan las series históricas reales de casos registrados contra las proyecciones obtenidas mediante el modelo predictivo calibrado para cada una de las patologías bajo estudio:
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{docs/Grafico_Dengue.png}
+    \caption{Comparación de casos reales vs. pronóstico de Dengue en Tucumán (2024).}
+    \label{fig:pronostico_dengue}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{docs/Grafico_Bronquiolitis.png}
+    \caption{Comparación de casos reales vs. pronóstico de Bronquiolitis en Tucumán (2024-2025).}
+    \label{fig:pronostico_bronquiolitis}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{docs/Grafico_Influenza.png}
+    \caption{Comparación de casos reales vs. pronóstico de Influenza en Tucumán (2024-2025).}
+    \label{fig:pronostico_influenza}
+\end{figure}
+
+\subsection{Interfaz de Integración: Tabla de Uso}
+Dado que el modelo matemático de asignación de recursos en la fase de optimización es de carácter estático y semanal, se diseñó la herramienta denominada ``Tabla de Uso''. Esta interfaz actúa como un filtro dinámico que permite a los planificadores hospitalarios seleccionar una semana epidemiológica específica de interés (por ejemplo, el pico histórico de la SE 17). La Tabla de Uso extrae la demanda proyectada ($D_i$) del modelo de pronósticos y la transfiere de forma automática como un parámetro constante hacia las restricciones del modelo de Programación Lineal Entera Mixta (PLEM).
+
+\subsection{Fase de Optimización: Resolución del PLEM}
+% Esta sección se completará al resolver el modelo matemático PLEM.
+
+\section{Interpretación}
+
+\subsection{Interpretación del Modelo de Pronósticos (Holt-Winters)}
+La interpretación del comportamiento de las curvas proyectadas indica que el modelo de Holt-Winters Multiplicativo se adapta eficazmente a la volatilidad de los brotes en la provincia de Tucumán. El análisis del dengue revela coeficientes estacionales sumamente altos concentrados en un intervalo de pocas semanas, lo cual exige una planificación reactiva intensiva y focalizada para evitar la saturación inmediata. Por el contrario, la demanda estacional de bronquiolitis e influenza muestra una distribución más suavizada a lo largo de la temporada invernal, lo que permite estructurar un esquema de abastecimiento preventivo y distribución de turnos médicos programada en el tiempo. La Tabla de Uso permite traducir directamente esta dinámica predictiva en los requerimientos específicos de demanda ($D_i$) para cada escenario de estrés sanitario.
+
+\subsection{Interpretación del Modelo de Optimización Lineal (PLEM)}
+% Esta sección se completará una vez resuelto el modelo PLEM y analizados los escenarios de asignación de recursos.
+
+\section{Conclusiones}
+
+\subsection{Conclusiones Parciales: Fase Predictiva}
+A partir del desarrollo e implementación de la fase de pronósticos, se concluye que:
+\begin{itemize}
+    \item La Suavización Exponencial Triple Holt-Winters con estacionalidad multiplicativa es una metodología matemática robusta para modelar brotes epidémicos complejos cuyas variaciones no son lineales ni constantes.
+    \item El uso de la herramienta WebPlotDigitizer permitió recuperar información cuantitativa de alta fidelidad a partir de curvas publicadas en reportes oficiales no estructurados, eliminando sesgos en el ingreso de datos históricos.
+    \item La Tabla de Uso demostró ser una interfaz funcional efectiva para desacoplar y comunicar secuencialmente un modelo dinámico de series temporales con un modelo estático y discreto de optimización semanal.
+\end{itemize}
+
+\subsection{Conclusiones Generales del Trabajo}
+% Se completará una vez integrados y evaluados los resultados de la optimización lineal.
 
 \begin{thebibliography}{00}
     \bibitem{ref1} Ministerio de Salud Pública de Tucumán. (2024). Sala de situación epidemiológica. Dirección de Epidemiología.
