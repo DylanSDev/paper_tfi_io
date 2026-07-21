@@ -8,16 +8,18 @@
 \usepackage{xcolor}
 \usepackage{cite}
 \usepackage{array}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
 
 \title{\textbf{Optimización de la gestión de recursos críticos hospitalarios: integración de pronósticos epidemiológicos y programación lineal ante brotes estacionales}\\[0.5em]
-\large Trabajo Final Integrador: Segundo Avance}
+\large Trabajo Final Integrador}
 
 \author{
     \IEEEauthorblockN{Bellor Maria E., Diaz Dylan S., Jimenez Fernando E., Veliz Ignacio M., Zato Sosa Celina A.}
     \IEEEauthorblockA{Universidad Tecnológica Nacional, Facultad Regional Tucumán\\
     Investigación Operativa\\
     \textbf{Profesores:} Dra. Gramajo Guadalupe, Ing. Rojas Cristina, Ing. Fraga Alvaro\\
-    Tucumán, Junio de 2026}
+    Tucumán, Julio de 2026}
 }
 
 \begin{document}
@@ -77,30 +79,6 @@ Desarrollar un sistema de soporte de decisiones fundamentado en modelos de Inves
     \item \textbf{Modelo Multiobjetivo:} Variante de optimización para resolver problemas con metas en conflicto directo, buscando un equilibrio entre minimizar costos operativos y maximizar la cobertura médica priorizada \cite{ref11}.
 \end{itemize}
 
-\subsection{Formulación Matemática de Holt-Winters Multiplicativo}
-El modelo de Suavización Exponencial Triple descompone la serie temporal en tres componentes mediante las siguientes ecuaciones de estado actualizadas semanalmente:
-\begin{equation}
-    L_t = \alpha \frac{y_t}{S_{t-s}} + (1 - \alpha) (L_{t-1} + T_{t-1})
-\end{equation}
-donde $L_t$ representa el nivel base, $y_t$ el valor real observado y $S_{t-s}$ el factor estacional del año previo. La tendencia secular $T_t$ se actualiza como:
-\begin{equation}
-    T_t = \beta (L_t - L_{t-1}) + (1 - \beta) T_{t-1}
-\end{equation}
-El factor de estacionalidad multiplicativo $S_t$ se calcula mediante:
-\begin{equation}
-    S_t = \gamma \frac{y_t}{L_t} + (1 - \gamma) S_{t-s}
-\end{equation}
-Finalmente, la proyección de la demanda esperada para un horizonte futuro $m$ se formula como:
-\begin{equation}
-    D_i = F_{t+m} = (L_t + m T_t) S_{t-s+m}
-\end{equation}
-Para cuantificar la desviación y precisión de las proyecciones frente a los valores reales, se computan el Error Absoluto ($EA_t$) y la Suma de Errores Cuadráticos ($SEC$):
-\begin{equation}
-    EA_t = |y_t - F_t|
-\end{equation}
-\begin{equation}
-    SEC = \sum_{t} (y_t - F_t)^2
-\end{equation}
 
 \section{Marco Contextual}
 \subsection{Contexto Demográfico y Población de Riesgo}
@@ -124,7 +102,7 @@ El modelo se enmarca en la provincia de Tucumán. Según datos del Censo Naciona
 \end{table}
 
 \subsection{Escenario de Máxima Tensión Epidemiológica (Referencia Histórica)}
-Para parametrizar el comportamiento de la demanda ($D_i$) en crisis, se toma el escenario histórico del ciclo 2023-2024 en Tucumán, donde confluyeron el mayor brote histórico de dengue y un aumento temprano de Infecciones Respiratorias Agudas Bajas (IRAB). La saturación máxima se registró entre las Semanas Epidemiológicas (SE) 15 y 19:
+Para parametrizar el comportamiento de la demanda ($D_i$) en crisis, se toma el escenario histórico del ciclo 2023-2024 en Tucumán, donde confluyeron el mayor brote histórico de dengue y un aumento temprano de Infecciones Respiratorias Agudas Bajas (IRAB). La saturación máxima se registró entre las Semanas Epidemiológicas (SE) 13 y 17 del 2024:
 \begin{table}[htbp]
     \caption{Registro histórico del pico de crisis multi-epidémica en Tucumán (valores de referencia basados en \cite{ref13})}
     \label{tab:pico_critico}
@@ -134,18 +112,24 @@ Para parametrizar el comportamiento de la demanda ($D_i$) en crisis, se toma el 
         \hline
         \multicolumn{1}{|>{\centering\arraybackslash}m{1.7cm}|}{\textbf{SE (Pico Crítico)}} & \multicolumn{1}{>{\centering\arraybackslash}m{1.3cm}|}{\textbf{Casos Dengue}} & \multicolumn{1}{>{\centering\arraybackslash}m{2.0cm}|}{\textbf{Bronquiolitis ($<$2 años)}} & \multicolumn{1}{>{\centering\arraybackslash}m{2.0cm}|}{\textbf{ETI / Influenza}} \\
         \hline
-        SE 15 (Med. Abril)                                                                  & 6.840                                                                         & 185                                                                                        & 210                                                                              \\
+        SE 13 (Fin Marzo)                                                                   & 7.290                                                                         & 64                                                                                         & 354                                                                              \\
         \hline
-        SE 16 (Fin Abril)                                                                   & 7.120                                                                         & 250                                                                                        & 285                                                                              \\
+        SE 14 (Inic. Abril)                                                                 & 8.333                                                                         & 69                                                                                         & 375                                                                              \\
         \hline
-        SE 17 (Inic. Mayo)                                                                  & 5.300                                                                         & 410                                                                                        & 360                                                                              \\
+        SE 15 (Med. Abril)                                                                  & 8.160                                                                         & 72                                                                                         & 328                                                                              \\
         \hline
-        SE 18 (Med. Mayo)                                                                   & 3.250                                                                         & 580                                                                                        & 490                                                                              \\
+        SE 16 (Fin Abril)                                                                   & 6.878                                                                         & 117                                                                                        & 437                                                                              \\
         \hline
-        SE 19 (Fin Mayo)                                                                    & 1.800                                                                         & 695                                                                                        & 620                                                                              \\
+        SE 17 (Inic. Mayo)                                                                  & 6.708                                                                         & 114                                                                                        & 531                                                                              \\
         \hline
     \end{tabular}
 \end{table}
+
+Para alimentar y calibrar el modelo predictivo en este contexto de crisis, se definieron criterios metodológicos específicos para la delimitación de las ventanas de datos históricos de cada patología:
+\begin{itemize}
+    \item \textbf{Dengue (Ciclos 2023--2024):} Se limitó a este periodo debido a que representó el evento de máxima crisis sanitaria en la historia de Tucumán. Incorporar años previos de baja circulación endémica distorsionaría la estacionalidad y restaría capacidad de alerta temprana ante brotes agudos y de comportamiento vectorial altamente dependiente de cepas e indicadores climáticos.
+    \item \textbf{Bronquiolitis e Influenza (Ciclos 2023--2025):} Se empleó una ventana de tres años. Estas patologías presentan un comportamiento endoepidémico invernal regular y cíclico, por lo que una muestra más amplia asegura la estabilidad estadística necesaria para modelar las Infecciones Respiratorias Agudas Bajas (IRAB).
+\end{itemize}
 
 \subsection{Parámetros Clínicos: Hospitalización, Severidad y Letalidad}
 La conversión de casos en requerimientos de insumos emplea tasas de consumo tecnológico ($T_{i,r}$) y ponderadores clínicos de gravedad ($\mu_i$), estructurados bajo directrices de la Organización Mundial de la Salud (OMS) y la Organización Panamericana de la Salud (OPS). El modelo filtra la demanda bruta según tasas de hospitalización esperadas e índices de letalidad:
@@ -170,41 +154,53 @@ La conversión de casos en requerimientos de insumos emplea tasas de consumo tec
 \subsection{Operativización Financiera y Restricciones de Capacidad}
 Los efectores de tercer nivel del SIPROSA operan con capacidad instalada rígida. El modelo calcula la capacidad neta deduciendo la carga base histórica ocupada por patologías no epidémicas (entre 60\% y 70\% de camas). Por su parte, los costos unitarios ($C_r$) y el presupuesto extraordinario semanal ($PresupuestoMax$) se ingresan dinámicamente según valores vigentes de mercado y asignaciones ministeriales, garantizando la aplicabilidad temporal del modelo al calcular la frontera de eficiencia óptima.
 
-\subsection{Contextualización de los Modelos}
-Para viabilizar la aplicación del marco metodológico propuesto, se requiere la parametrización sistemática tanto de la fase predictiva como de la fase de optimización lineal. A continuación, se detallan y contextualizan los parámetros clave que gobiernan ambos modelos.
+\subsection{Origen de Datos y Metodología de Digitalización}
+Los datos cuantitativos semanales reales ($y_t$) se obtuvieron de los reportes oficiales de la sala de situación epidemiológica del SIPROSA y de los Boletines Epidemiológicos Nacionales, cubriendo desde marzo de 2023 hasta enero de 2026.
 
-\subsubsection{Parámetros de la Fase Predictiva (Suavización Exponencial Triple)}
-El sistema predictivo opera bajo los siguientes índices, horizontes y constantes:
-\begin{itemize}
-    \item $t$: Índice temporal de la semana epidemiológica específica en la serie ($t = 1, 2, \dots, n$).
-    \item $i$: Patología bajo análisis (donde $i=1$ es Dengue, $i=2$ es Bronquiolitis y $i=3$ es Influenza).
-    \item $s$: Longitud del ciclo estacional anual ($s = 52$ semanas).
-    \item $m$: Horizonte temporal de pronóstico futuro.
-    \item Constantes de suavizamiento optimizadas en el intervalo $[0,1]$: de nivel ($\alpha$), de tendencia ($\beta$) y de estacionalidad ($\gamma$).
-\end{itemize}
+Debido a que múltiples reportes históricos solo presentaban las curvas epidemiológicas en formato gráfico no editable (PDFs), se utilizó la herramienta digitalizadora \textbf{WebPlotDigitizer} para realizar una calibración de ejes cartesianos y extraer con precisión milimétrica las coordenadas numéricas de casos semanales reales.
 
-\subsubsection{Criterio de Selección de Ciclos Históricos y Ventanas Temporales}
-La delimitación de las ventanas de datos históricos para alimentar el modelo responde a las características biológicas y de transmisión de cada patología:
-\begin{itemize}
-    \item \textbf{Dengue (Ciclos 2023--2024):} Se limitó a este periodo debido a que representó el evento de máxima crisis sanitaria en la historia de Tucumán. Incorporar años previos de baja circulación endémica distorsionaría la estacionalidad y restaría capacidad de alerta temprana ante brotes agudos y de comportamiento vectorial altamente dependiente de cepas e indicadores climáticos.
-    \item \textbf{Bronquiolitis e Influenza (Ciclos 2023--2025):} Se empleó una ventana de tres años. Estas patologías presentan un comportamiento endoepidémico invernal regular y cíclico, por lo que una muestra más amplia asegura la estabilidad estadística necesaria para modelar las Infecciones Respiratorias Agudas Bajas (IRAB).
-\end{itemize}
+\section{Modelo simbólico}
+El desarrollo del sistema integrado se compone de dos fases matemáticas sucesivas: un modelo predictivo basado en series temporales para estimar la demanda y un modelo de programación lineal entera mixta para optimizar la asignación de recursos.
 
-\subsubsection{Origen de Datos y Digitalización de Gráficos}
-Los datos cuantitativos semanales reales ($y_t$) se obtuvieron de los reportes oficiales de la sala de situación epidemiológica del SIPROSA y de los Boletines Epidemiológicos Nacionales, cubriendo desde marzo de 2023 hasta enero de 2026. 
+\subsection{Modelo de Pronósticos (Holt-Winters Multiplicativo)}
+La fase predictiva opera sobre un conjunto estructurado de índices y parámetros, donde $t$ denota la semana epidemiológica ($t = 1, 2, \dots, n$), $i$ representa la patología ($i = 1$ para Dengue, $i = 2$ para Bronquiolitis y $i = 3$ para Influenza), $s$ es la longitud del ciclo estacional anual ($s = 52$ semanas) y $m$ es el horizonte temporal de pronóstico.
 
-Debido a que múltiples reportes históricos solo presentaban las curvas epidemiológicas en formato gráfico no editable (PDFs escaneados), se utilizó la herramienta digitalizadora \textbf{WebPlotDigitizer} para realizar una calibración de ejes cartesianos y extraer con precisión milimétrica las coordenadas numéricas de casos semanales reales.
+El modelo de Suavización Exponencial Triple (Holt-Winters Multiplicativo) descompone la serie temporal real ($y_t$) actualizando semanalmente sus componentes a través de constantes de suavizamiento optimizadas en el intervalo $[0,1]$: de nivel ($\alpha$), de tendencia ($\beta$) y de estacionalidad ($\gamma$).
 
-\subsubsection{Parámetros y Funciones Objetivo de la Fase de Optimización (Programación Lineal Entera Mixta Multiobjetivo)}
-El modelo de optimización lineal entera mixta está diseñado bajo un enfoque multiobjetivo para balancear la sustentabilidad presupuestaria y la efectividad socio-sanitaria en la asignación de recursos críticos.
+La ecuación de actualización del nivel base $L_t$ se formula como:
+\begin{equation}
+    L_t = \alpha \frac{y_t}{S_{t-s}} + (1 - \alpha) (L_{t-1} + T_{t-1})
+\end{equation}
+donde $L_t$ representa el nivel base, $y_t$ el valor real observado y $S_{t-s}$ el factor estacional del año previo. La tendencia secular $T_t$ se actualiza como:
+\begin{equation}
+    T_t = \beta (L_t - L_{t-1}) + (1 - \beta) T_{t-1}
+\end{equation}
+El factor de estacionalidad multiplicativo $S_t$ se calcula mediante:
+\begin{equation}
+    S_t = \gamma \frac{y_t}{L_t} + (1 - \gamma) S_{t-s}
+\end{equation}
+Finalmente, la proyección de la demanda esperada para un horizonte futuro $m$ se formula como:
+\begin{equation}
+    D_i = F_{t+m} = (L_t + m T_t) S_{t-s+m}
+\end{equation}
+Para cuantificar la desviación y precisión de las proyecciones frente a los valores reales, se computan el Error Absoluto ($EA_t$) y la Suma de Errores Cuadráticos ($SEC$):
+\begin{equation}
+    EA_t = |y_t - F_t|
+\end{equation}
+\begin{equation}
+    SEC = \sum_{t} (y_t - F_t)^2
+\end{equation}
 
-\paragraph{Funciones Objetivo:}
+\subsection{Modelo de Optimización (Programación Lineal Entera Mixta)}
+El modelo PLEM multiobjetivo balancea la sustentabilidad presupuestaria y la efectividad socio-sanitaria en la asignación de recursos críticos.
+
+\subsubsection{Funciones Objetivo}
 \begin{itemize}
     \item \textbf{Minimización de Costos Operativos y Penalizaciones ($Z_1$):} Modela el costo total extraordinario semanal asociado al brote. Busca minimizar la suma de la asignación e insumos de recursos adicionales (ponderada por sus costos unitarios $C_r$) y el impacto/penalidad punitiva, socio-ética y legal ($P_i$) incurrida por cada paciente de patología $i$ no atendido ($F_i$).
     \item \textbf{Maximización de la Atención Sanitaria Ponderada ($Z_2$):} Garantiza una priorización ética-médica (triage algorítmico) maximizando la cantidad de pacientes atendidos ($X_i$), ponderados individualmente por el índice clínico de gravedad o letalidad relativa ($\mu_i$) de su patología.
 \end{itemize}
 
-\paragraph{Parámetros del Modelo:}
+\subsubsection{Parámetros del Modelo}
 \begin{itemize}
     \item \textbf{Tasa de consumo tecnológico ($T_{i,r}$):} Coeficiente técnico que define los requerimientos específicos del recurso $r$ por paciente de patología $i$.
     \item \textbf{Capacidad nominal ($K_{\text{max},r}$):} Disponibilidad nominal total del recurso $r$ en la infraestructura física y de personal del hospital.
@@ -215,12 +211,10 @@ El modelo de optimización lineal entera mixta está diseñado bajo un enfoque m
     \item \textbf{Presupuesto disponible ($Presupuesto$):} Fondo financiero máximo extraordinario asignado semanalmente para la contingencia sanitaria.
 \end{itemize}
 
-\section{Modelo simbólico}
-
 \section{Resolución}
 
 \subsection{Fase Predictiva: Resultados y Ajuste del Pronóstico}
-Para hallar la combinación óptima de las constantes de suavizamiento ($\alpha, \beta, \gamma$), se empleó el Solver de Microsoft Excel, configurando como celda objetivo la minimización de la Suma de Errores Cuadráticos ($SEC$) sobre los datos históricos. 
+Para hallar la combinación óptima de las constantes de suavizamiento ($\alpha, \beta, \gamma$), se empleó el Solver de Microsoft Excel \cite{refExcel}, configurando como celda objetivo la minimización de la Suma de Errores Cuadráticos ($SEC$) sobre los datos históricos.
 
 El modelo de Holt-Winters Multiplicativo logró capturar las dinámicas específicas de cada patología:
 \begin{itemize}
@@ -295,6 +289,7 @@ A partir del desarrollo e implementación de la fase de pronósticos, se concluy
     \bibitem{ref13} Ministerio de Salud de la Nación. (2024). Boletín Epidemiológico Nacional N° 702 - SE 17.
     \bibitem{ref14} Organización Mundial de la Salud [OMS]. (2023). Dengue y dengue grave: Datos y cifras.
     \bibitem{ref15} Organización Panamericana de la Salud [OPS]. (2022). Actualización Epidemiológica: Virus Respiratorio Sincitial (VSR) e Influenza en la Región de las Américas.
+    \bibitem{refExcel} Veliz, I. M., Bellor, M. E., Diaz, D. S., Jimenez, F. E., \& Zato, C. A. (2026). Planilla de soporte y calibración del modelo de pronósticos: \emph{Optimización de la gestión de recursos críticos hospitalarios}. Disponible en: \url{https://bit.ly/pronosticos_invop}
 \end{thebibliography}
 
 \end{document}
