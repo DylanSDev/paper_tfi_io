@@ -82,6 +82,11 @@ Desarrollar un sistema de soporte de decisiones fundamentado en modelos de Inves
 
 
 \section{Marco Contextual}
+\subsection{Alcance Metodológico y Carácter General del Modelo}
+El sistema propuesto constituye un marco matemático genérico y adaptable de soporte a las decisiones logístico-asistenciales, concebido como una herramienta de planificación proactiva para anticipar la preparación hospitalaria ante crisis epidemiológicas, y no como una regla rígida ni un protocolo normativo taxativo. La arquitectura del modelo es modular y secuencial: se alimenta en primera instancia por los vectores de demanda esperada ($D_i$) provistos por el modelo predictivo de pronósticos, y posteriormente por la matriz de parámetros operativos ($K_{\text{max},r}, B_r, T_{i,r}, C_r$) específicos de cualquier efector de salud que requiera desplegarlo.
+
+Para validar el funcionamiento práctico y la robustez del algoritmo ante un escenario epidemiológico agudo real, se utilizó como prototipo de estudio de referencia al \textbf{Hospital Centro de Salud Zenón J. Santillán} \cite{refMSPT2}, efector de tercer nivel de la provincia de Tucumán. La parametrización del caso de prueba integra una combinación de datos institucionales oficiales confirmados (capacidad física de camas, normativas salariales y personal de plantilla) y valores estimados basados en directrices técnicas de la OMS/OPS (matriz de consumo tecnológico $T_{i,r}$ y costos de insumos de contingencia). Los supuestos, fórmulas y desgloses de dichos parámetros estimados se detallan explícitamente en las planillas de soporte del trabajo \cite{refGP}.
+
 \subsection{Contexto Demográfico y Población de Riesgo}
 El modelo se enmarca en la provincia de Tucumán. Según datos del Censo Nacional 2022 \cite{ref12}, de sus 1.703.186 habitantes, el 42\% depende de manera exclusiva del subsistema público de salud (SIPROSA). La segmentación etaria es fundamental para estimar la demanda potencial asimétrica ante el brote:
 \begin{table}[htbp]
@@ -184,12 +189,12 @@ Finalmente, la proyección de la demanda provincial bruta para un horizonte futu
 \begin{equation}
     F_{i,t+m} = (L_{t,i} + m T_{t,i}) S_{t-s+m,i}
 \end{equation}
-Para cuantificar la desviación y precisión de las proyecciones frente a los valores reales, se computan el Error Absoluto ($EA_t$) y la Suma de Errores Cuadráticos ($SEC$):
+Para cuantificar la desviación y precisión de las proyecciones frente a los valores reales, se computan el Error Absoluto ($EA_t$) y la Desviación Absoluta Media ($MAD$):
 \begin{equation}
     EA_t = |y_t - F_t|
 \end{equation}
 \begin{equation}
-    SEC = \sum_{t} (y_t - F_t)^2
+    MAD = \frac{1}{n} \sum_{t=1}^{n} |y_t - F_t|
 \end{equation}
 
 \subsection{Conversión de la Demanda y Modelo de Interfaz (Tabla de Uso)}
@@ -259,7 +264,7 @@ La \textbf{función objetivo} global minimiza de forma secuencial las desviacion
 \section{Resolución}
 
 \subsection{Fase Predictiva: Resultados y Ajuste del Pronóstico}
-Para hallar la combinación óptima de las constantes de suavizamiento ($\alpha, \beta, \gamma$), se empleó el Solver de Microsoft Excel \cite{refExcel}, configurando como celda objetivo la minimización de la Suma de Errores Cuadráticos ($SEC$) sobre los datos históricos.
+Para hallar la combinación óptima de las constantes de suavizamiento ($\alpha, \beta, \gamma$), se empleó el Solver de Microsoft Excel \cite{refExcel}, configurando como celda objetivo la minimización de la Desviación Absoluta Media ($MAD$) sobre los datos históricos.
 
 El modelo de Holt-Winters Multiplicativo logró capturar las dinámicas específicas de cada patología:
 \begin{itemize}

@@ -23,9 +23,9 @@ A continuación se detallan los 14 factores del modelo de pronósticos y optimiz
 - **Consecuencia:** No queda claro si el modelo representa un único hospital nodal, una red de hospitales o una proporción de la capacidad provincial.
 
 ### Lista de verificación
-- [ ] Definir explícitamente el alcance institucional del modelo en la introducción y marco contextual (efector nodal vs. red SIPROSA).
-- [ ] Alinear la capacidad nominal ($K_{\text{max},r}$) y carga base ($B_r$) con el alcance institucional seleccionado.
-- [ ] Aclarar en la metodología cómo se extrapolan los resultados al sistema sanitario provincial.
+- [x] Aclarar en el informe que el modelo es un marco general que se alimenta primero por el modelo de pronósticos y luego por los parámetros de un hospital en específico (herramienta matemática de soporte a decisiones, no una regla fija).
+- [x] Aclarar que para probar y validar el funcionamiento del modelo se utilizaron datos del Hospital Centro de Salud Zenón J. Santillán.
+- [x] Detallar que los datos utilizados combinan valores confirmados y estimados (cuyas estimaciones y supuestos se detallan en la planilla de Excel).
 
 ---
 
@@ -132,7 +132,7 @@ A continuación se detallan los 14 factores del modelo de pronósticos y optimiz
 
 ### Lista de verificación
 - [ ] Explicitación del enfoque determinístico del modelo de optimización.
-- [ ] Incorporar los márgenes de error del pronóstico ($EA_t$, $SEC$) para construir escenarios de demanda (pesimista, esperado, optimista).
+- [ ] Incorporar los márgenes de error del pronóstico ($EA_t$, $MAD$) para construir escenarios de demanda (pesimista, esperado, optimista).
 - [ ] Evaluar la sensibilidad del plan de asignación de recursos ante variaciones en la demanda proyectada.
 
 ---
