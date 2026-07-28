@@ -273,32 +273,28 @@ El modelo de Holt-Winters Multiplicativo logró capturar las dinámicas específ
     \item \textbf{Influenza:} Reveló una circulación viral sostenida a lo largo del año con picos invernales superpuestos, permitiendo una proyección estable útil para prever horas de personal de salud y consumo de oxígeno.
 \end{itemize}
 
-A continuación se presentan los gráficos que comparan las series históricas reales de casos registrados contra las proyecciones obtenidas mediante el modelo predictivo calibrado para cada una de las patologías bajo estudio:
+A continuación se presentan los gráficos que comparan las series históricas reales de casos registrados contra las proyecciones obtenidas mediante el modelo predictivo calibrado para cada una de las patologías bajo estudio, dispuestos en secuencia vertical:
 
-\begin{figure*}[!t]
+\begin{figure}[htbp]
     \centering
-    \begin{minipage}{0.48\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{docs/Grafico_Dengue.png}
-        \caption{Comparación de casos reales vs. pronóstico de Dengue en Tucumán (2024).}
-        \label{fig:pronostico_dengue}
-    \end{minipage}\hfill
-    \begin{minipage}{0.48\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{docs/Grafico_Bronquiolitis.png}
-        \caption{Comparación de casos reales vs. pronóstico de Bronquiolitis en Tucumán (2024-2025).}
-        \label{fig:pronostico_bronquiolitis}
-    \end{minipage}
-    
-    \vspace{2em}
-    
-    \begin{minipage}{0.48\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{docs/Grafico_Influenza.png}
-        \caption{Comparación de casos reales vs. pronóstico de Influenza en Tucumán (2024-2025).}
-        \label{fig:pronostico_influenza}
-    \end{minipage}
-\end{figure*}
+    \includegraphics[width=\linewidth]{docs/Grafico_Dengue.png}
+    \caption{Comparación de casos reales vs. pronóstico de Dengue en Tucumán (2024).}
+    \label{fig:pronostico_dengue}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{docs/Grafico_Bronquiolitis.png}
+    \caption{Comparación de casos reales vs. pronóstico de Bronquiolitis en Tucumán (2024-2025).}
+    \label{fig:pronostico_bronquiolitis}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{docs/Grafico_Influenza.png}
+    \caption{Comparación de casos reales vs. pronóstico de Influenza en Tucumán (2024-2025).}
+    \label{fig:pronostico_influenza}
+\end{figure}
 
 \subsection{Interfaz de Integración: Tabla de Uso}
 Dado que el modelo matemático de asignación de recursos en la fase de optimización es de carácter estático y semanal, se diseñó la herramienta denominada ``Tabla de Uso''. Esta interfaz actúa como un filtro dinámico que permite a los planificadores hospitalarios seleccionar una semana epidemiológica específica de interés (por ejemplo, el pico histórico de la SE 17). La Tabla de Uso extrae la demanda proyectada ($D_i$) del modelo de pronósticos y la transfiere de forma automática como un parámetro constante hacia las restricciones del modelo de Programación Lineal Entera Mixta (PLEM).
@@ -323,9 +319,10 @@ El modelo de Programación por Metas Lexicográfica resuelto en dos etapas cumpl
 El presente trabajo ha permitido establecer un marco analítico integral para la toma de decisiones hospitalarias ante crisis epidemiológicas, combinando pronósticos y optimización. A partir del desarrollo e implementación de las fases metodológicas, se concluye que:
 
 \begin{itemize}
-    \item La Suavización Exponencial Triple Holt-Winters con estacionalidad multiplicativa es una metodología matemática robusta para modelar brotes epidémicos complejos cuyas variaciones no son lineales ni constantes.
-    \item El uso de la herramienta WebPlotDigitizer permitió recuperar información cuantitativa de alta fidelidad a partir de curvas publicadas en reportes oficiales no estructurados, eliminando sesgos en el ingreso de datos históricos.
-    \item La Tabla de Uso demostró ser una interfaz funcional efectiva para desacoplar y comunicar secuencialmente un modelo dinámico de series temporales con un modelo estático y discreto de optimización semanal.
+    \item \textbf{Efectividad del Modelo Predictivo:} La Suavización Exponencial Triple Holt-Winters con estacionalidad multiplicativa demostró ser una metodología matemática altamente efectiva para modelar brotes epidémicos estacionales no lineales, logrando capturar tanto la explosividad aguda del Dengue como los ciclos invernales de las patologías respiratorias (Bronquiolitis e Influenza).
+    \item \textbf{Comportamiento de la Constante de Tendencia ($\beta \to 0$):} Al optimizar los parámetros de suavizamiento ($\alpha, \beta, \gamma$) en Excel Solver para minimizar la Desviación Absoluta Media ($MAD$), la constante de tendencia $\beta$ tendió sistemáticamente a cero ($\beta \approx 0$). Esto ocurre porque los brotes epidemiológicos estacionales no obedecen a una tendencia secular persistente de largo plazo, sino a un comportamiento puramente oscilatorio y cíclico anual regulado por el nivel base ($L_t$) y por factores estacionales multiplicativos muy marcados ($S_t$). Permitir una constante $\beta > 0$ generaría proyecciones con tendencias lineales espurias que amplificarían artificialmente los picos epidémicos o producirían valores negativos durante las fases interepidémicas; por ende, la anulación de $\beta$ por parte de Solver preserva la estabilidad del nivel y la periodicidad estacional real.
+    \item \textbf{Recuperación Digital de Datos:} El uso de la herramienta WebPlotDigitizer permitió recuperar información cuantitativa de alta fidelidad a partir de curvas publicadas en reportes oficiales no estructurados, eliminando sesgos en el ingreso de datos históricos.
+    \item \textbf{Desacoplamiento Operativo:} La Tabla de Uso demostró ser una interfaz funcional efectiva para desacoplar y comunicar secuencialmente un modelo dinámico de series temporales con un modelo estático y discreto de optimización semanal.
     \item \textbf{Cobertura Médica Lograda:} De una demanda semanal proyectada de 530 pacientes, el modelo logró atender a 111 (20,9\%), revelando que incluso optimizando la asignación según la gravedad clínica, la capacidad instalada es crónicamente insuficiente ante picos epidémicos.
     \item \textbf{Restricción Financiera (Sobrecosto):} El costo mínimo para sostener esa cobertura ascendió a \$45.931.015, lo que representa un sobrecosto ($d_2^+$) de \$28.931.015 por encima del fondo de contingencia (\$17.000.000). Esto demuestra cuantitativamente la incompatibilidad del presupuesto actual con la demanda real.
     \item \textbf{Identificación de Cuellos de Botella:} Contrario a la percepción de falta de infraestructura general, el modelo identificó que los verdaderos limitantes fueron los insumos descartables (Kits Respiratorios al 99,0\% y Kits de Hidratación al 99,3\% de uso). Recursos como camas UTI y horas médicas mostraron un amplio margen ocioso, ofreciendo una vía de solución mucho más directa y económica vía gestión de compras.
