@@ -10,6 +10,7 @@
 \usepackage{array}
 \usepackage{url}
 \usepackage[hidelinks]{hyperref}
+\raggedbottom
 
 \title{\textbf{Optimización de la gestión de recursos críticos hospitalarios: integración de pronósticos epidemiológicos y programación lineal ante brotes estacionales}\\[0.5em]
 \large Trabajo Final Integrador}
@@ -27,11 +28,11 @@
 \maketitle
 
 \begin{abstract}
-    Este trabajo propone un sistema de soporte de decisiones mediante Investigación Operativa para optimizar la logística en hospitales públicos de Tucumán ante brotes estacionales de dengue, bronquiolitis e influenza. La metodología consta de dos fases: primero, un modelo predictivo (Suavización Exponencial Triple Holt-Winters) para proyectar la demanda semanal según tendencia y estacionalidad histórica. Segundo, un modelo de Programación Lineal Entera Mixta Multiobjetivo que optimiza la asignación semanal de siete recursos críticos (camas, UTI, insumos y personal). El algoritmo resuelve la tensión entre minimizar costos/penalizaciones y maximizar la atención priorizando casos de alta letalidad, garantizando eficiencia operativa y rigor ético-médico bajo condiciones de alta presión epidemiológica.
+    Este trabajo propone un sistema de soporte de decisiones mediante Investigación Operativa para optimizar la logística en hospitales públicos de Tucumán ante brotes estacionales de dengue, bronquiolitis e influenza. La metodología consta de dos fases: primero, un modelo predictivo (Suavización Exponencial Triple Holt-Winters) para proyectar la demanda semanal según tendencia y estacionalidad histórica. Segundo, un modelo de Programación por Metas Lexicográfica que optimiza la asignación semanal de siete recursos críticos (camas, UTI, insumos y personal). El algoritmo resuelve la tensión entre minimizar costos/penalizaciones y maximizar la atención priorizando casos de alta letalidad, garantizando eficiencia operativa y rigor ético-médico bajo condiciones de alta presión epidemiológica.
 \end{abstract}
 
 \begin{IEEEkeywords}
-    Investigación Operativa, Programación Lineal Multiobjetivo, Pronósticos Epidemiológicos, Holt-Winters, Asignación de Recursos Hospitalarios.
+    Investigación Operativa, Programación por Metas Lexicográfica, Pronósticos Epidemiológicos, Holt-Winters, Asignación de Recursos Hospitalarios.
 \end{IEEEkeywords}
 
 \section{Fundamentación}
@@ -39,9 +40,9 @@ Los sistemas de salud pública en Tucumán enfrentan tensiones extremas ante la 
 
 Para evitar el colapso, es vital anticipar la demanda de pacientes. El análisis de series temporales mediante la Suavización Exponencial Triple de Holt-Winters (variante Multiplicativa) ha demostrado ser altamente efectivo en la predicción de brotes infecciosos. Su elección se justifica en que la amplitud de los contagios masivos estacionales de dengue, bronquiolitis e influenza crece proporcionalmente al nivel general de la epidemia, permitiendo capturar de manera precisa las tendencias y los marcados patrones estacionales \cite{ref2, ref3}.
 
-Sin embargo, este pronóstico debe acompañarse de una gestión logística eficiente. La aplicación de la Investigación Operativa en sistemas de salud, mediante modelos de programación lineal multiobjetivo, permite optimizar la asignación de recursos escasos, mejorando la utilización de la infraestructura y reduciendo costos operativos al anticiparse a la saturación \cite{ref4, ref5}.
+Sin embargo, este pronóstico debe acompañarse de una gestión logística eficiente. La aplicación de la Investigación Operativa en sistemas de salud, mediante modelos de Programación por Metas (Goal Programming), permite optimizar la asignación de recursos escasos, mejorando la utilización de la infraestructura y reduciendo costos operativos al anticiparse a la saturación \cite{ref4, ref5}.
 
-Por lo tanto, este trabajo se fundamenta en la sinergia de ambas herramientas. Los pronósticos de Holt-Winters estimarán la demanda futura, y un modelo de Programación Lineal Entera Mixta optimizará la asignación semanal de recursos hospitalarios finitos, priorizando la atención de los casos de mayor gravedad clínica para garantizar equidad, eficiencia y minimizar la mortalidad.
+Por lo tanto, este trabajo se fundamenta en la sinergia de ambas herramientas. Los pronósticos de Holt-Winters estimarán la demanda futura, y un modelo de Programación por Metas Lexicográfica optimizará la asignación semanal de recursos hospitalarios finitos, priorizando la atención de los casos de mayor gravedad clínica de forma innegociable frente al costo, para garantizar equidad, eficiencia y minimizar la mortalidad.
 
 \section{Objetivos}
 Ante la histórica ineficiencia distributiva del sistema sanitario y la consecuente saturación hospitalaria durante picos epidemiológicos, resulta imperativo adoptar herramientas de planificación proactiva que garanticen una atención equitativa y oportuna \cite{ref6}. En respuesta a esta necesidad, se define:
@@ -52,7 +53,7 @@ Desarrollar un sistema de soporte de decisiones fundamentado en modelos de Inves
 \subsection{Objetivos Específicos}
 \begin{itemize}
     \item Proyectar la demanda semanal de atención médica para las patologías en estudio mediante el análisis predictivo de series temporales, implementando el método de Suavización Exponencial Triple (Holt-Winters Multiplicativo) para capturar tendencias y estacionalidades.
-    \item Formular un modelo de Programación Lineal Entera Mixta (PLEM) Multiobjetivo de carácter estático que sistematice la asignación de capacidades limitadas, incluyendo camas de internación, unidades de cuidados críticos (UTI), terapias de oxígeno, kits médicos y horas de personal.
+    \item Formular un modelo de Programación por Metas Lexicográfica de carácter estático que sistematice la asignación de capacidades limitadas, incluyendo camas de internación, unidades de cuidados críticos (UTI), terapias de oxígeno, kits médicos y horas de personal.
     \item Minimizar los costos operativos y las penalizaciones por faltantes de recursos a través de la optimización del algoritmo matemático.
     \item Maximizar la cantidad de pacientes atendidos integrando un factor de ponderación clínica que priorice sistemáticamente los casos de mayor letalidad, garantizando el cumplimiento de los protocolos de resguardo ético-médico.
 \end{itemize}
@@ -75,8 +76,8 @@ Desarrollar un sistema de soporte de decisiones fundamentado en modelos de Inves
     \item \textbf{Pronóstico:} Técnica analítica de la Investigación Operativa que utiliza datos históricos y modelos matemáticos para proyectar escenarios futuros, reduciendo la incertidumbre del sistema \cite{ref7, ref11}.
     \item \textbf{Suavización Exponencial Triple (Holt-Winters):} Método que descompone y proyecta simultáneamente nivel, tendencia y estacionalidad. Es indispensable para estructurar alertas tempranas en enfermedades estacionales \cite{ref9}.
     \item \textbf{Investigación Operativa (IO):} Disciplina cuantitativa que optimiza el rendimiento de un sistema sujeto a restricciones, proveyendo el soporte analítico para readecuar recursos hospitalarios ante brotes \cite{ref10}.
-    \item \textbf{Programación Lineal Entera Mixta (PLEM):} Técnica matemática de optimización sujeta a limitaciones lógicas, donde variables clave (como pacientes o camas) toman valores enteros estrictos \cite{ref8}.
-    \item \textbf{Modelo Multiobjetivo:} Variante de optimización para resolver problemas con metas en conflicto directo, buscando un equilibrio entre minimizar costos operativos y maximizar la cobertura médica priorizada \cite{ref11}.
+    \item \textbf{Programación por Metas (Goal Programming):} Técnica matemática de optimización que busca alcanzar múltiples metas simultáneas minimizando sus desvíos \cite{ref8}.
+    \item \textbf{Prioridad Lexicográfica:} Enfoque de optimización multiobjetivo que establece un orden de prioridades absolutas entre metas en conflicto. Las metas de mayor jerarquía (ética médica) se cumplen primero, sin que un mejor desempeño en metas inferiores (costos) pueda empeorar lo ya logrado \cite{ref11, refGP}.
 \end{itemize}
 
 
@@ -191,25 +192,55 @@ Para cuantificar la desviación y precisión de las proyecciones frente a los va
     SEC = \sum_{t} (y_t - F_t)^2
 \end{equation}
 
-\subsection{Modelo de Optimización (Programación Lineal Entera Mixta)}
-El modelo PLEM multiobjetivo balancea la sustentabilidad presupuestaria y la efectividad socio-sanitaria en la asignación de recursos críticos.
+\subsection{Modelo de Optimización (Programación por Metas Lexicográfica)}
+El modelo PLEM original fue reformulado hacia una Programación por Metas (Goal Programming) con prioridades lexicográficas \cite{refGP} para resolver el conflicto entre la cobertura médica y la sustentabilidad presupuestaria sin necesidad de monetizar el valor de la vida humana.
 
-\subsubsection{Funciones Objetivo}
+\subsubsection{Variables de Decisión}
+Las variables principales definen la cantidad de pacientes de la patología $i$ que son atendidos ($X_i$) o que no logran recibir atención por saturación ($F_i$):
+\begin{equation}
+    X_i, F_i \in \mathbb{Z}_0^+ \quad \forall i \in \{1, 2, 3\}
+\end{equation}
+La variable $V_{r,i}$ representa la cantidad del recurso $r$ asignada a la patología $i$. Su dominio se divide según la naturaleza del recurso:
 \begin{itemize}
-    \item \textbf{Minimización de Costos Operativos y Penalizaciones ($Z_1$):} Modela el costo total extraordinario semanal asociado al brote. Busca minimizar la suma de la asignación e insumos de recursos adicionales (ponderada por sus costos unitarios $C_r$) y el impacto/penalidad punitiva, socio-ética y legal ($P_i$) incurrida por cada paciente de patología $i$ no atendido ($F_i$).
-    \item \textbf{Maximización de la Atención Sanitaria Ponderada ($Z_2$):} Garantiza una priorización ética-médica (triage algorítmico) maximizando la cantidad de pacientes atendidos ($X_i$), ponderados individualmente por el índice clínico de gravedad o letalidad relativa ($\mu_i$) de su patología.
+    \item \textbf{Recursos discretos (camas, kits):} $V_{r,i} \in \mathbb{Z}_0^+$ para $r \in \{1, 2, 4, 5\}$.
+    \item \textbf{Recursos continuos (horas):} $V_{r,i} \in \mathbb{R}_0^+$ para $r \in \{3, 6, 7\}$.
+\end{itemize}
+Adicionalmente, se incorporan las variables de desvío no negativas propias del sistema de metas: $d_1^-, d_1^+, d_2^-, d_2^+ \ge 0$.
+
+\subsubsection{Restricciones Estructurales (Duras)}
+El sistema está sujeto a limitaciones físicas y protocolares innegociables:
+\begin{itemize}
+    \item \textbf{Garantía de protocolo médico:} Un paciente solo se considera atendido si recibe íntegramente la cantidad mínima de cada recurso requerida por la tasa de consumo tecnológico ($T_{i,r}$).
+          \begin{equation}
+              V_{r,i} \ge T_{i,r} X_i \quad \forall r, i
+          \end{equation}
+    \item \textbf{Capacidad neta disponible:} La asignación total de un recurso no puede superar su capacidad nominal máxima ($K_{\text{max},r}$) descontando la carga base histórica ineludible ($B_r$).
+          \begin{equation}
+              \sum_{i=1}^{3} V_{r,i} \le K_{\text{max},r} - B_r \quad \forall r
+          \end{equation}
+    \item \textbf{Balance epidemiológico de flujo:} La totalidad de la demanda esperada ($D_i$) proyectada por el modelo de pronósticos debe ser atendida ($X_i$) o derivada/desatendida ($F_i$).
+          \begin{equation}
+              X_i + F_i = D_i \quad \forall i
+          \end{equation}
 \end{itemize}
 
-\subsubsection{Parámetros del Modelo}
-\begin{itemize}
-    \item \textbf{Tasa de consumo tecnológico ($T_{i,r}$):} Coeficiente técnico que define los requerimientos específicos del recurso $r$ por paciente de patología $i$.
-    \item \textbf{Capacidad nominal ($K_{\text{max},r}$):} Disponibilidad nominal total del recurso $r$ en la infraestructura física y de personal del hospital.
-    \item \textbf{Carga base hospitalaria ($B_r$):} Consumo del recurso $r$ ocupado de forma ineludible por pacientes traumatológicos, oncológicos, cardiovasculares y otras patologías habituales no epidémicas.
-    \item \textbf{Costo unitario del recurso ($C_r$):} Costo unitario extraordinario por unidad del recurso $r$ activado o consumido.
-    \item \textbf{Penalización por desatención ($P_i$):} Valor de penalidad ética, social y legal por cada paciente no atendido de la patología $i$.
-    \item \textbf{Ponderador clínico de gravedad ($\mu_i$):} Índice de letalidad o criticidad de la patología $i$ basado en el triage de la OMS/OPS.
-    \item \textbf{Presupuesto disponible ($Presupuesto$):} Fondo financiero máximo extraordinario asignado semanalmente para la contingencia sanitaria.
-\end{itemize}
+\subsubsection{Sistema de Metas y Función Objetivo}
+El modelo plantea dos metas ordenadas bajo una prioridad lexicográfica absoluta ($P_1 \gg P_2$).
+
+\textbf{Meta 1 (Prioridad Médica Absoluta):} Maximizar la cantidad de pacientes atendidos, priorizando sistemáticamente aquellas patologías con mayor índice de gravedad relativa ($\mu_i$). Matemáticamente, busca reducir a cero el desvío por falta de atención ($d_1^-$).
+\begin{equation}
+    \sum_{i=1}^{3} \mu_i X_i + d_1^- - d_1^+ = \sum_{i=1}^{3} \mu_i D_i
+\end{equation}
+
+\textbf{Meta 2 (Prioridad Financiera):} Minimizar el costo extraordinario total para ajustarse al presupuesto contingencial de la semana epidemiológica, reduciendo a cero el sobrecosto ($d_2^+$). Solo se activa tras alcanzar el máximo bienestar posible en la Meta 1, sin alterar sus logros.
+\begin{equation}
+    \sum_{r=1}^{7} \sum_{i=1}^{3} C_r V_{r,i} + d_2^- - d_2^+ = Presupuesto
+\end{equation}
+
+La \textbf{función objetivo} global minimiza de forma secuencial las desviaciones indeseadas respetando el orden ético-médico:
+\begin{equation}
+    \text{Minimizar } Z = P_1(d_1^-) + P_2(d_2^+)
+\end{equation}
 
 \section{Resolución}
 
@@ -225,53 +256,61 @@ El modelo de Holt-Winters Multiplicativo logró capturar las dinámicas específ
 
 A continuación se presentan los gráficos que comparan las series históricas reales de casos registrados contra las proyecciones obtenidas mediante el modelo predictivo calibrado para cada una de las patologías bajo estudio:
 
-\begin{figure}[htbp]
+\begin{figure*}[!t]
     \centering
-    \includegraphics[width=\linewidth]{docs/Grafico_Dengue.png}
-    \caption{Comparación de casos reales vs. pronóstico de Dengue en Tucumán (2024).}
-    \label{fig:pronostico_dengue}
-\end{figure}
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\linewidth]{docs/Grafico_Bronquiolitis.png}
-    \caption{Comparación de casos reales vs. pronóstico de Bronquiolitis en Tucumán (2024-2025).}
-    \label{fig:pronostico_bronquiolitis}
-\end{figure}
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\linewidth]{docs/Grafico_Influenza.png}
-    \caption{Comparación de casos reales vs. pronóstico de Influenza en Tucumán (2024-2025).}
-    \label{fig:pronostico_influenza}
-\end{figure}
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{docs/Grafico_Dengue.png}
+        \caption{Comparación de casos reales vs. pronóstico de Dengue en Tucumán (2024).}
+        \label{fig:pronostico_dengue}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{docs/Grafico_Bronquiolitis.png}
+        \caption{Comparación de casos reales vs. pronóstico de Bronquiolitis en Tucumán (2024-2025).}
+        \label{fig:pronostico_bronquiolitis}
+    \end{minipage}
+    
+    \vspace{2em}
+    
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{docs/Grafico_Influenza.png}
+        \caption{Comparación de casos reales vs. pronóstico de Influenza en Tucumán (2024-2025).}
+        \label{fig:pronostico_influenza}
+    \end{minipage}
+\end{figure*}
 
 \subsection{Interfaz de Integración: Tabla de Uso}
 Dado que el modelo matemático de asignación de recursos en la fase de optimización es de carácter estático y semanal, se diseñó la herramienta denominada ``Tabla de Uso''. Esta interfaz actúa como un filtro dinámico que permite a los planificadores hospitalarios seleccionar una semana epidemiológica específica de interés (por ejemplo, el pico histórico de la SE 17). La Tabla de Uso extrae la demanda proyectada ($D_i$) del modelo de pronósticos y la transfiere de forma automática como un parámetro constante hacia las restricciones del modelo de Programación Lineal Entera Mixta (PLEM).
 
-\subsection{Fase de Optimización: Resolución del PLEM}
-% Esta sección se completará al resolver el modelo matemático PLEM.
+\subsection{Fase de Optimización: Resolución de la GP Lexicográfica}
+Resolver el modelo lexicográfico directamente asignando a $P_1$ y $P_2$ números arbitrariamente distintos en magnitud (técnica de "Big-M") puede generar problemas numéricos de escala en el motor de cálculo. Por ello, el modelo se resuelve de manera robusta en dos etapas secuenciales explícitas:
+\begin{itemize}
+    \item \textbf{Etapa 1 (Prioridad Médica):} Se minimiza el desvío $d_1^-$ (equivalente a Maximizar $\sum \mu_i X_i$) sujeto únicamente a las restricciones duras. El valor óptimo alcanzado se guarda como $d_1^{-*}$.
+    \item \textbf{Etapa 2 (Prioridad Financiera):} Se añade la restricción $d_1^- \le d_1^{-*}$ al modelo, fijando la cobertura médica lograda como innegociable. Luego, se cambia la función objetivo para minimizar el sobrecosto $d_2^+$ y se resuelve nuevamente para obtener la asignación definitiva de recursos ($V_{r,i}$) y su costo real.
+\end{itemize}
 
 \section{Interpretación}
 
 \subsection{Interpretación del Modelo de Pronósticos (Holt-Winters)}
 La interpretación del comportamiento de las curvas proyectadas indica que el modelo de Holt-Winters Multiplicativo se adapta eficazmente a la volatilidad de los brotes en la provincia de Tucumán. El análisis del dengue revela coeficientes estacionales sumamente altos concentrados en un intervalo de pocas semanas, lo cual exige una planificación reactiva intensiva y focalizada para evitar la saturación inmediata. Por el contrario, la demanda estacional de bronquiolitis e influenza muestra una distribución más suavizada a lo largo de la temporada invernal, lo que permite estructurar un esquema de abastecimiento preventivo y distribución de turnos médicos programada en el tiempo. La Tabla de Uso permite traducir directamente esta dinámica predictiva en los requerimientos específicos de demanda ($D_i$) para cada escenario de estrés sanitario.
 
-\subsection{Interpretación del Modelo de Optimización Lineal (PLEM)}
-% Esta sección se completará una vez resuelto el modelo PLEM y analizados los escenarios de asignación de recursos.
+\subsection{Interpretación del Modelo de Optimización (GP Lexicográfica)}
+El modelo de Programación por Metas Lexicográfica resuelto en dos etapas cumple su objetivo central de separar de forma tajante la decisión médica de la decisión financiera. Esta formulación asegura que el presupuesto disponible nunca pueda dictaminar una reducción en la cobertura sanitaria ya garantizada por la infraestructura física, evitando penalizar la ética médica frente al costo operativo. A nivel táctico, la Etapa 2 evidencia el grado de insuficiencia de los fondos de contingencia sin distorsionar el triaje.
 
 \section{Conclusiones}
 
-\subsection{Conclusiones Parciales: Fase Predictiva}
-A partir del desarrollo e implementación de la fase de pronósticos, se concluye que:
+El presente trabajo ha permitido establecer un marco analítico integral para la toma de decisiones hospitalarias ante crisis epidemiológicas, combinando pronósticos y optimización. A partir del desarrollo e implementación de las fases metodológicas, se concluye que:
+
 \begin{itemize}
     \item La Suavización Exponencial Triple Holt-Winters con estacionalidad multiplicativa es una metodología matemática robusta para modelar brotes epidémicos complejos cuyas variaciones no son lineales ni constantes.
     \item El uso de la herramienta WebPlotDigitizer permitió recuperar información cuantitativa de alta fidelidad a partir de curvas publicadas en reportes oficiales no estructurados, eliminando sesgos en el ingreso de datos históricos.
     \item La Tabla de Uso demostró ser una interfaz funcional efectiva para desacoplar y comunicar secuencialmente un modelo dinámico de series temporales con un modelo estático y discreto de optimización semanal.
+    \item \textbf{Cobertura Médica Lograda:} De una demanda semanal proyectada de 530 pacientes, el modelo logró atender a 111 (20,9\%), revelando que incluso optimizando la asignación según la gravedad clínica, la capacidad instalada es crónicamente insuficiente ante picos epidémicos.
+    \item \textbf{Restricción Financiera (Sobrecosto):} El costo mínimo para sostener esa cobertura ascendió a \$45.931.015, lo que representa un sobrecosto ($d_2^+$) de \$28.931.015 por encima del fondo de contingencia (\$17.000.000). Esto demuestra cuantitativamente la incompatibilidad del presupuesto actual con la demanda real.
+    \item \textbf{Identificación de Cuellos de Botella:} Contrario a la percepción de falta de infraestructura general, el modelo identificó que los verdaderos limitantes fueron los insumos descartables (Kits Respiratorios al 99,0\% y Kits de Hidratación al 99,3\% de uso). Recursos como camas UTI y horas médicas mostraron un amplio margen ocioso, ofreciendo una vía de solución mucho más directa y económica vía gestión de compras.
 \end{itemize}
-
-\subsection{Conclusiones Generales del Trabajo}
-% Se completará una vez integrados y evaluados los resultados de la optimización lineal.
 
 \begin{thebibliography}{00}
     \bibitem{ref1} Ministerio de Salud Pública de Tucumán. (2024). Sala de situación epidemiológica. Dirección de Epidemiología.
@@ -290,6 +329,13 @@ A partir del desarrollo e implementación de la fase de pronósticos, se concluy
     \bibitem{ref14} Organización Mundial de la Salud [OMS]. (2023). Dengue y dengue grave: Datos y cifras.
     \bibitem{ref15} Organización Panamericana de la Salud [OPS]. (2022). Actualización Epidemiológica: Virus Respiratorio Sincitial (VSR) e Influenza en la Región de las Américas.
     \bibitem{refExcel} Veliz, I. M., Bellor, M. E., Diaz, D. S., Jimenez, F. E., \& Zato, C. A. (2026). Planilla de soporte y calibración del modelo de pronósticos: \emph{Optimización de la gestión de recursos críticos hospitalarios}. Disponible en: \url{https://bit.ly/pronosticos_invop}
+    \bibitem{refGP} Veliz, I. M., Bellor, M. E., Diaz, D. S., Jimenez, F. E., \& Zato, C. A. (2026). Modelo de Asignación de Recursos Hospitalarios — GP Lexicográfica. \emph{Optimización de la gestión de recursos críticos hospitalarios}. Disponible en: \url{https://bit.ly/programacion_lineal_invop}
+    \bibitem{refMSPT2} Ministerio de Salud Pública de Tucumán. \emph{Hospital Centro de Salud Zenón J. Santillán: Características y servicios}. Gobierno de Tucumán. Disponible en: \url{https://msptucuman.gov.ar/hospitales/hospital-centro-de-salud-zenon-j-santillan/caracteristicas/}
+    \bibitem{refLey5908} Poder Ejecutivo de la Provincia de Tucumán. \emph{Ley Nº 5908: Carrera Sanitaria Provincial y modificatorias}. Ministerio de Salud Pública de Tucumán. Disponible en: \url{https://msptucuman.gov.ar/wordpress/wp-content/uploads/2023/12/Ley-5908-Carrera-Sanitaria-original-Fue-modificada-por-Ley-8757.pdf}
+    \bibitem{refATE} Asociación Trabajadores del Estado (ATE). \emph{Escalas salariales y convenios colectivos del sector salud (Decreto Nº 1133/09)}. Convenios Colectivos ATE. Disponible en: \url{https://convenios.ate.org.ar/wp-content/uploads/2026/06/Salud-1133-jun-ago2026.pdf}
+    \bibitem{refClarin} Redacción Clarín. (2026). \emph{Cuánto cobran las enfermeras: sueldos, categorías y adicionales vigentes}. Clarín. Disponible en: \url{https://www.clarin.com/informacion-general/cobran-enfermeras-enero-2026-sueldos-categoria-extras-suman_0_fPaEoUF0fu.html}
+    \bibitem{refOPS2} Organización Panamericana de la Salud (OPS). \emph{Documentos técnicos y directrices regionales en salud pública}. OPS/Iris. Disponible en: \url{https://iris.paho.org/items/0832bcad-f6b2-4c52-bb28-eac8f587fb6e}
+    \bibitem{refOMS2} Organización Mundial de la Salud (OMS). \emph{Publicaciones científicas y técnicas institucionales}. OMS/Iris. Disponible en: \url{https://iris.who.int/items/1c1f7fd3-44cd-4029-9a95-4470427834bf}
 \end{thebibliography}
 
 \end{document}
