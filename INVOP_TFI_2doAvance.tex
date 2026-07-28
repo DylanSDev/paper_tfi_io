@@ -180,9 +180,9 @@ El factor de estacionalidad multiplicativo $S_t$ se calcula mediante:
 \begin{equation}
     S_t = \gamma \frac{y_t}{L_t} + (1 - \gamma) S_{t-s}
 \end{equation}
-Finalmente, la proyección de la demanda esperada para un horizonte futuro $m$ se formula como:
+Finalmente, la proyección de la demanda provincial bruta para un horizonte futuro $m$ se formula como:
 \begin{equation}
-    D_i = F_{t+m} = (L_t + m T_t) S_{t-s+m}
+    F_{i,t+m} = (L_{t,i} + m T_{t,i}) S_{t-s+m,i}
 \end{equation}
 Para cuantificar la desviación y precisión de las proyecciones frente a los valores reales, se computan el Error Absoluto ($EA_t$) y la Suma de Errores Cuadráticos ($SEC$):
 \begin{equation}
@@ -191,6 +191,20 @@ Para cuantificar la desviación y precisión de las proyecciones frente a los va
 \begin{equation}
     SEC = \sum_{t} (y_t - F_t)^2
 \end{equation}
+
+\subsection{Conversión de la Demanda y Modelo de Interfaz (Tabla de Uso)}
+Para adaptar la demanda provincial bruta proyectada $F_{i,t+m}$ a la escala de planificación operativa de un efector hospitalario nodal en el modelo de optimización, se formaliza la conversión mediante la herramienta denominada ``Tabla de Uso'', fundamentada en dos coeficientes del sistema sanitario:
+
+\begin{itemize}
+    \item \textbf{Factor de absorción del subsistema público ($\theta_{\text{público}} = 0{,}60$):} Aunque la tasa de población sin cobertura formal de salud en Tucumán es del 42\% (Censo 2022 \cite{ref12}), durante contingencias epidémicas agudas (brotes de Dengue y picos de IRAB) el subsistema público (SIPROSA) absorbe aproximadamente el 60\% ($\theta_{\text{público}} = 0{,}60$) de la demanda directa efectiva. Esto responde a la saturación del sector privado, la falta de áreas de aislamiento febril o UTI pediátricas/adultas en clínicas privadas, y a la centralización de los protocolos de contingencia en la red pública.
+    \item \textbf{Red de efectores de tercer nivel ($H_{\text{nodales}} = 6$):} La atención asistencial de contingencia de mediana y alta complejidad en la provincia se concentra en 6 hospitales públicos de Nivel III (Hospital Centro de Salud, Hospital Padilla, Hospital Avellaneda, Hospital del Niño Jesús, Hospital Eva Perón y Hospital de Concepción). La carga del sector público se distribuye equitativamente entre estos 6 efectores nodales.
+\end{itemize}
+
+De este modo, la demanda semanal ajustada $D_i$ que ingresa como parámetro determinístico a las restricciones de flujo del modelo de Programación por Metas en la semana objetivo se calcula formalmente como:
+\begin{equation}
+    D_i = \left\lceil \frac{F_{i, t+m} \cdot \theta_{\text{público}}}{H_{\text{nodales}}} \right\rceil
+\end{equation}
+donde $\lceil \cdot \rceil$ representa la función techo para asegurar un valor entero y conservador en la estimación de pacientes hospitalarios.
 
 \subsection{Modelo de Optimización (Programación por Metas Lexicográfica)}
 El modelo PLEM original fue reformulado hacia una Programación por Metas (Goal Programming) con prioridades lexicográficas \cite{refGP} para resolver el conflicto entre la cobertura médica y la sustentabilidad presupuestaria sin necesidad de monetizar el valor de la vida humana.

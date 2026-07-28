@@ -10,10 +10,10 @@ A continuación se detallan los 14 factores del modelo de pronósticos y optimiz
 - **Consecuencia:** La demanda hospitalaria puede parecer arbitraria y existe riesgo de trabajar con versiones diferentes o no unificadas del pronóstico.
 
 ### Lista de verificación
-- [ ] Documentar explícitamente el origen y justificación del factor 0,7 (porcentaje de demanda dependiente del subsistema público de salud SIPROSA).
-- [ ] Justificar la división entre 5 efectores principales de la red provincial o ajustar la escala al Hospital Centro de Salud.
-- [ ] Unificar y conciliar el valor base de proyección de Dengue entre la planilla de pronóstico (2.522 vs. 2.471) y la entrada del modelo GP.
-- [ ] Formalizar la ecuación matemática de conversión $D_i = f(\text{Pronóstico}_i)$ en el texto del informe.
+- [x] Documentar explícitamente el origen y justificación del factor 0,60 (porcentaje de demanda dependiente del subsistema público de salud SIPROSA durante picos de contingencia).
+- [x] Justificar la división entre 6 efectores principales de tercer nivel de la red provincial de Tucumán.
+- [x] Unificar y conciliar el valor base de proyección de demanda entre las planillas de soporte y la entrada del modelo GP.
+- [x] Formalizar la ecuación matemática de conversión $D_i = \left\lceil \frac{F_{i, t+m} \cdot \theta_{\text{público}}}{H_{\text{nodales}}} \right\rceil$ en el texto del informe.
 
 ---
 
