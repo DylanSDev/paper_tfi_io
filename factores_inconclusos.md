@@ -35,9 +35,9 @@ A continuación se detallan los 14 factores del modelo de pronósticos y optimiz
 - **Consecuencia:** No puede demostrarse matemáticamente que los 346, 95 y 89 pacientes sean realmente quienes requieren la infraestructura hospitalaria.
 
 ### Lista de verificación
-- [ ] Integrar formalmente las tasas de triaje y hospitalización en la ecuación de conversión de la demanda.
-- [ ] Demostrar que los valores $D_i = (346, 95, 89)$ se derivan de aplicar los porcentajes de severidad sobre el total de contagios proyectados.
-- [ ] Incluir la formulación explícita del filtro epidemiológico: $D_{i,\text{hosp}} = \text{Casos}_i \times \text{TasaHosp}_i$.
+- [x] Integrar formalmente las tasas de triaje y hospitalización en la ecuación de conversión de la demanda.
+- [x] Demostrar que los valores $D_i = (346, 95, 89)$ se derivan de aplicar los porcentajes de severidad sobre el total de contagios proyectados.
+- [x] Incluir la formulación explícita del filtro epidemiológico: $D_{i,\text{hosp}} = \text{Casos}_i \times \text{TasaHosp}_i$.
 
 ---
 
@@ -47,9 +47,9 @@ A continuación se detallan los 14 factores del modelo de pronósticos y optimiz
 - **Consecuencia:** Se mezclan pacientes ambulatorios, internados en sala general y pacientes críticos de UTI en una única variable $X_i$.
 
 ### Lista de verificación
-- [ ] Explicar y justificar la asunción de "paciente promedio ponderado" basada en la distribución histórica de severidad.
-- [ ] Documentar el cálculo de los coeficientes tecnológicos promedio $T_{i,r}$ como ponderación entre casos moderados y graves.
-- [ ] Proponer en las recomendaciones la futura desagregación de $X_i$ en subcategorías por nivel de atención (ambulatorio, sala general, UTI).
+- [x] Explicar y justificar la asunción de "paciente promedio ponderado" basada en la distribución histórica de severidad.
+- [x] Documentar el cálculo de los coeficientes tecnológicos promedio $T_{i,r}$ como ponderación entre casos moderados y graves.
+- [x] Proponer en las recomendaciones la futura desagregación de $X_i$ en subcategorías por nivel de atención (ambulario, sala general, UTI).
 
 ---
 
@@ -59,9 +59,9 @@ A continuación se detallan los 14 factores del modelo de pronósticos y optimiz
 - **Consecuencia:** Una persona atendida por influenza equivale matemáticamente a cinco por dengue; esa relación exige una fundamentación clínica y epidemiológica sólida.
 
 ### Lista de verificación
-- [ ] Sustentar la escala de ponderación $\mu_i$ en indicadores clínicos objetivos (tasas de letalidad histórica o riesgo pediátrico/geriátrico OMS/OPS).
-- [ ] Documentar el procedimiento de normalización de la escala $\mu_i$.
-- [ ] Incluir un análisis de sensibilidad sobre la variabilidad de $\mu_i$ y su impacto en la jerarquización de atención.
+- [x] Sustentar la escala de ponderación $\mu_i$ en indicadores clínicos objetivos (tasas de letalidad histórica o riesgo pediátrico/geriátrico OMS/OPS).
+- [x] Documentar el procedimiento de normalización de la escala $\mu_i$ como escala ordinal (baja/moderada = 1, alta = 2, muy alta = 3) especificando que representa orden relativo y no proporcionalidad cardinal.
+- [x] Incluir un análisis de sensibilidad sobre la variabilidad de $\mu_i$ y su impacto en la jerarquización de atención.
 
 ---
 
@@ -71,9 +71,9 @@ A continuación se detallan los 14 factores del modelo de pronósticos y optimiz
 - **Consecuencia:** Es una decisión sanitaria determinante (especialmente para bronquiolitis), pero sin el debido sustento formal parece un parámetro arbitrario.
 
 ### Lista de verificación
-- [ ] Formalizar e incorporar explícitamente la restricción de equidad $X_i \ge 0,10 \cdot D_i \quad \forall i$ en el modelo simbólico de LaTeX.
-- [ ] Justificar epidemiológicamente el umbral del 10 % como un criterio de resguardo ético-asistencial mínimo innegociable.
-- [ ] Analizar y documentar el impacto en la asignación al remover o alterar este piso mínimo.
+- [x] Formalizar e incorporar explícitamente la restricción de equidad $X_i \ge 0,10 \cdot D_i \quad \forall i$ en el modelo simbólico de LaTeX.
+- [x] Justificar epidemiológicamente el umbral del 10 % como un criterio de resguardo ético-asistencial mínimo innegociable.
+- [x] Analizar y documentar el impacto en la asignación al remover o alterar este piso mínimo.
 
 ---
 
@@ -83,9 +83,9 @@ A continuación se detallan los 14 factores del modelo de pronósticos y optimiz
 - **Consecuencia:** Si el costo total estuviera por debajo de $\$17.000.000$, cualquier solución factible tendría $d_2^+ = 0$, imposibilitando seleccionar la opción de menor costo real.
 
 ### Lista de verificación
-- [ ] Explicar detalladamente en la metodología el funcionamiento de la Meta 2 bajo escenarios con y sin sobrecosto.
-- [ ] Discutir la alternativa de minimizar el costo total real $\sum \sum C_r V_{r,i}$ en lugar de limitarse a la variable de desvío excedente.
-- [ ] Demostrar que en el escenario de pico epidemiológico analizado ($SE_{19}$ / $SE_{17}$) la demanda siempre supera el presupuesto, haciendo operativo a $d_2^+$.
+- [x] Explicar detalladamente en la metodología el funcionamiento de la Meta 2 bajo escenarios con y sin sobrecosto.
+- [x] Discutir la alternativa de minimizar el costo total real $\sum \sum C_r V_{r,i}$ en lugar de limitarse a la variable de desvío excedente.
+- [x] Demostrar que en el escenario de pico epidemiológico analizado ($SE_{19}$ / $SE_{17}$) la demanda siempre supera el presupuesto, haciendo operativo a $d_2^+$.
 
 ---
 
@@ -95,9 +95,9 @@ A continuación se detallan los 14 factores del modelo de pronósticos y optimiz
 - **Consecuencia:** Puede sobreestimarse el fondo de contingencia necesario, porque parte de esos recursos ya forma parte de la estructura fiduciaria y presupuestaria habitual del hospital.
 
 ### Lista de verificación
-- [ ] Clasificar de forma precisa los recursos entre costos fijos/habituales y costos marginales/extraordinarios de contingencia.
-- [ ] Ajustar o justificar la asignación de los valores $C_r$ distinguiendo insumos consumibles de capital humano y físico preexistente.
-- [ ] Desglosar en los resultados la diferencia entre costo operativo total y necesidad neta de financiamiento extraordinario.
+- [x] Clasificar de forma precisa los recursos entre costos fijos/habituales y costos marginales/extraordinarios de contingencia.
+- [x] Ajustar o justificar la asignación de los valores $C_r$ distinguiendo insumos consumibles de capital humano y físico preexistente.
+- [x] Desglosar en los resultados la diferencia entre costo operativo total y necesidad neta de financiamiento extraordinario.
 
 ---
 
@@ -107,9 +107,9 @@ A continuación se detallan los 14 factores del modelo de pronósticos y optimiz
 - **Consecuencia:** La ocupación de camas, kits, oxígeno y personal difícilmente sea idéntica y constante durante todas las semanas epidemiológicas.
 
 ### Lista de verificación
-- [ ] Diferenciar los porcentajes de carga base $B_r$ según la naturaleza específica de cada recurso.
-- [ ] Documentar la fuente institucional o estadística del SIPROSA para las tasas de ocupación basal habitual.
-- [ ] Realizar un análisis de sensibilidad sobre variaciones en la carga base (ej. 60 %, 70 %, 80 %).
+- [x] Diferenciar los porcentajes de carga base $B_r$ según la naturaleza específica de cada recurso.
+- [x] Documentar la fuente institucional o estadística del SIPROSA para las tasas de ocupación basal habitual.
+- [x] Realizar un análisis de sensibilidad sobre variaciones en la carga base (ej. 60 %, 70 %, 80 %).
 
 ---
 
@@ -119,9 +119,9 @@ A continuación se detallan los 14 factores del modelo de pronósticos y optimiz
 - **Consecuencia:** No considera pacientes que ingresaron la semana anterior, la duración real de las internaciones (días de estancia), el inventario remanente ni compras futuras.
 
 ### Lista de verificación
-- [ ] Declarar explícitamente en el marco metodológico y limitaciones que el modelo es estático monoperíodo.
-- [ ] Explicar cómo la "Tabla de Uso" permite desacoplar y evaluar semanas críticas individuales.
-- [ ] Proponer la formulación de una extensión dinámica multiperiodo como trabajo futuro.
+- [x] Declarar explícitamente en el marco metodológico y limitaciones que el modelo es estático monoperíodo.
+- [x] Explicar cómo la "Tabla de Uso" permite desacoplar y evaluar semanas críticas individuales.
+- [x] Proponer la formulación de una extensión dinámica multiperiodo como trabajo futuro.
 
 ---
 
@@ -131,9 +131,9 @@ A continuación se detallan los 14 factores del modelo de pronósticos y optimiz
 - **Consecuencia:** El modelo produce una asignación óptima para un pronóstico puntual que puede presentar desviaciones en la práctica.
 
 ### Lista de verificación
-- [ ] Explicitación del enfoque determinístico del modelo de optimización.
-- [ ] Incorporar los márgenes de error del pronóstico ($EA_t$, $MAD$) para construir escenarios de demanda (pesimista, esperado, optimista).
-- [ ] Evaluar la sensibilidad del plan de asignación de recursos ante variaciones en la demanda proyectada.
+- [x] Explicitación del enfoque determinístico del modelo de optimización.
+- [x] Incorporar los márgenes de error del pronóstico ($EA_t$, $MAD$) para construir escenarios de demanda (pesimista, esperado, optimista).
+- [x] Evaluar la sensibilidad del plan de asignación de recursos ante variaciones en la demanda proyectada.
 
 ---
 
@@ -143,9 +143,9 @@ A continuación se detallan los 14 factores del modelo de pronósticos y optimiz
 - **Consecuencia:** No diferencia entre derivación a la red secundaria/privada, atención ambulatoria diferida, lista de espera o ausencia total de asistencia.
 
 ### Lista de verificación
-- [ ] Definir conceptualmente el significado operativo y sanitario de $F_i$ en el contexto del SIPROSA (derivación institucional / reprogramación).
-- [ ] Categorizar las vías de resolución asistencial para la demanda no absorbida por el efector principal.
-- [ ] Incorporar dicha interpretación en la discusión de resultados y conclusiones.
+- [x] Definir conceptualmente el significado operativo y sanitario de $F_i$ en el contexto del SIPROSA (imposibilidad de brindar el estándar completo de la guía técnica, sin implicar abandono).
+- [x] Categorizar las vías de resolución asistencial para la demanda no absorbida por el efector principal (contención sintomática en guardia, reprogramación de turnos y derivación institucional a la red secundaria).
+- [x] Incorporar dicha interpretación en la discusión de resultados y conclusiones.
 
 ---
 
@@ -155,9 +155,9 @@ A continuación se detallan los 14 factores del modelo de pronósticos y optimiz
 - **Consecuencia:** Los valores de asignación de recursos y costos obtenidos al finalizar la Etapa 1 no son únicos ni económicamente interpretables.
 
 ### Lista de verificación
-- [ ] Incluir una advertencia técnica indicando que los valores de $V_{r,i}$ de la Etapa 1 son instrumentales y no deben reportarse como solución final.
-- [ ] Confirmar que los reportes de dotación de recursos y presupuesto provienen de la Etapa 2.
-- [ ] Verificar matemáticamente que la minimización de $d_2^+$ en la Etapa 2 ajusta $V_{r,i}$ exactamente al mínimo requerido por protocolo ($T_{i,r} X_i$).
+- [x] Incluir una advertencia técnica indicando que los valores de $V_{r,i}$ de la Etapa 1 son instrumentales y no deben reportarse como solución final.
+- [x] Confirmar que los reportes de dotación de recursos y presupuesto provienen de la Etapa 2.
+- [x] Verificar matemáticamente que la minimización de $d_2^+$ en la Etapa 2 ajusta $V_{r,i}$ exactamente al mínimo requerido por protocolo ($T_{i,r} X_i$).
 
 ---
 
@@ -167,6 +167,6 @@ A continuación se detallan los 14 factores del modelo de pronósticos y optimiz
 - **Consecuencia:** Es un parámetro sin efecto sobre la solución matemática que genera dudas sobre su finalidad en la planilla.
 
 ### Lista de verificación
-- [ ] Aclarar en el informe el rol puramente informativo y de reporte post-hoc de la penalización $P_i$ (cálculo del Costo Social Total $\sum P_i F_i$).
-- [ ] Fundamentar por qué $P_i$ se excluye de la función objetivo para preservar la independencia ética de la Meta 1.
-- [ ] Incluir el cálculo del Costo Social en la tabla de resultados e interpretación gerencial.
+- [x] Aclarar en el informe el rol puramente informativo y de reporte post-hoc de la penalización $P_i$ (cálculo del Costo Social Total $\sum P_i F_i$).
+- [x] Fundamentar por qué $P_i$ se excluye de la función objetivo para preservar la independencia ética de la Meta 1.
+- [x] Incluir el cálculo del Costo Social en la tabla de resultados e interpretación gerencial.

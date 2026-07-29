@@ -8,8 +8,9 @@
 \usepackage{xcolor}
 \usepackage{cite}
 \usepackage{array}
-\usepackage{url}
+\usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
+\usepackage[section]{placeins}
 \raggedbottom
 
 \title{\textbf{Optimización de la gestión de recursos críticos hospitalarios: integración de pronósticos epidemiológicos y programación lineal ante brotes estacionales}\\[0.5em]
@@ -28,7 +29,7 @@
 \maketitle
 
 \begin{abstract}
-    Este trabajo propone un sistema de soporte de decisiones mediante Investigación Operativa para optimizar la logística en hospitales públicos de Tucumán ante brotes estacionales de dengue, bronquiolitis e influenza. La metodología consta de dos fases: primero, un modelo predictivo (Suavización Exponencial Triple Holt-Winters) para proyectar la demanda semanal según tendencia y estacionalidad histórica. Segundo, un modelo de Programación por Metas Lexicográfica que optimiza la asignación semanal de siete recursos críticos (camas, UTI, insumos y personal). El algoritmo resuelve la tensión entre minimizar costos/penalizaciones y maximizar la atención priorizando casos de alta letalidad, garantizando eficiencia operativa y rigor ético-médico bajo condiciones de alta presión epidemiológica.
+    Este trabajo propone un sistema de soporte de decisiones fundamentado en Investigación Operativa para optimizar la gestión logística hospitalaria en Tucumán ante la saturación provocada por brotes estacionales de dengue, bronquiolitis e influenza. La metodología integra un modelo predictivo Holt-Winters Multiplicativo para proyectar la demanda semanal y un modelo de Programación por Metas Lexicográfica estructurado en subetapas secuenciales que segmentan la atención según triaje clínico (cuidados intensivos, hospitalización general y atención ambulatoria). El algoritmo prioriza sistemáticamente la cobertura médica de los casos de mayor gravedad, garantizando la atención integral de los pacientes críticos e internados, al tiempo que la etapa financiera minimiza el sobrecosto operativo sin degradar los logros médicos alcanzados. Los resultados demuestran que la saturación asistencial no se origina en la infraestructura de camas ni en el personal de salud, sino en cuellos de botella logísticos de insumos descartables específicos, ofreciendo una herramienta transparente para la planificación sanitaria proactiva.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -54,7 +55,7 @@ Desarrollar un sistema de soporte de decisiones fundamentado en modelos de Inves
 \begin{itemize}
     \item Proyectar la demanda semanal de atención médica para las patologías en estudio mediante el análisis predictivo de series temporales, implementando el método de Suavización Exponencial Triple (Holt-Winters Multiplicativo) para capturar tendencias y estacionalidades.
     \item Formular un modelo de Programación por Metas Lexicográfica de carácter estático que sistematice la asignación de capacidades limitadas, incluyendo camas de internación, unidades de cuidados críticos (UTI), terapias de oxígeno, kits médicos y horas de personal.
-    \item Minimizar los costos operativos y las penalizaciones por faltantes de recursos a través de la optimización del algoritmo matemático.
+    \item Minimizar los costos operativos a través de la optimización del algoritmo matemático, garantizando la eficiencia financiera sin comprometer la cobertura asistencial.
     \item Maximizar la cantidad de pacientes atendidos integrando un factor de ponderación clínica que priorice sistemáticamente los casos de mayor letalidad, garantizando el cumplimiento de los protocolos de resguardo ético-médico.
 \end{itemize}
 
@@ -66,7 +67,7 @@ Desarrollar un sistema de soporte de decisiones fundamentado en modelos de Inves
     \item \textbf{Capacidad neta hospitalaria:} Disponibilidad operativa real, sujeta a restricciones estrictas de presupuesto, espacio y protocolos.
     \item \textbf{Planificación sanitaria proactiva:} Estrategia para anticipar necesidades futuras y evitar el colapso hospitalario frente a crisis epidemiológicas.
     \item \textbf{Ponderación clínica (Triage):} Priorización matemática de atención basada en la severidad y la letalidad histórica de cada paciente.
-    \item \textbf{Penalización por déficit de atención:} Costo socioeconómico, legal y ético asumido por el sistema público ante cada paciente no atendido.
+
     \item \textbf{Logística de Contingencia Sanitaria:} Abastecimiento y distribución eficiente de recursos para sostener la operatividad ininterrumpida.
     \item \textbf{Costo Operativo Hospitalario:} Erogación financiera base y extraordinaria requerida para sostener la infraestructura y el capital humano.
 \end{itemize}
@@ -83,7 +84,9 @@ Desarrollar un sistema de soporte de decisiones fundamentado en modelos de Inves
 
 \section{Marco Contextual}
 \subsection{Alcance Metodológico y Carácter General del Modelo}
-El sistema propuesto constituye un marco matemático genérico y adaptable de soporte a las decisiones logístico-asistenciales, concebido como una herramienta de planificación proactiva para anticipar la preparación hospitalaria ante crisis epidemiológicas, y no como una regla rígida ni un protocolo normativo taxativo. La arquitectura del modelo es modular y secuencial: se alimenta en primera instancia por los vectores de demanda esperada ($D_i$) provistos por el modelo predictivo de pronósticos, y posteriormente por la matriz de parámetros operativos ($K_{\text{max},r}, B_r, T_{i,r}, C_r$) específicos de cualquier efector de salud que requiera desplegarlo.
+El sistema propuesto constituye un marco matemático genérico y adaptable de soporte a las decisiones logístico-asistenciales, concebido como una herramienta de planificación proactiva para prever el uso más eficiente de los recursos hospitalarios ante crisis epidemiológicas. Se declara explícitamente que el modelo de optimización es de carácter estático y monoperíodo; evalúa un horizonte de decisión semanal aislado sin arrastrar internaciones de períodos previos, inventarios acumulados ni órdenes de compra futuras.
+
+Es fundamental destacar que este modelo no constituye una regla matemática rígida de cumplimiento obligatorio ni una directiva automatizada de asignación taxativa. Funciona como un instrumento cuantitativo de orientación estratégica cuya aplicación práctica estará siempre supeditada al criterio profesional médico, al juicio clínico individualizado y a los principios éticos y morales que rigen a la sociedad. La arquitectura del modelo es modular y secuencial: se alimenta en primera instancia por los vectores de demanda esperada ($D_i$) provistos por el modelo predictivo determinístico de pronósticos (Holt-Winters), y posteriormente por la matriz de parámetros operativos ($K_{\text{max},r}, B_r, T_{i,r}, C_r$) específicos de cualquier efector de salud que requiera desplegarlo.
 
 Para validar el funcionamiento práctico y la robustez del algoritmo ante un escenario epidemiológico agudo real, se utilizó como prototipo de estudio de referencia al \textbf{Hospital Centro de Salud Zenón J. Santillán} \cite{refMSPT2}, efector de tercer nivel de la provincia de Tucumán. La parametrización del caso de prueba integra una combinación de datos institucionales oficiales confirmados (capacidad física de camas, normativas salariales y personal de plantilla) y valores estimados basados en directrices técnicas de la OMS/OPS (matriz de consumo tecnológico $T_{i,r}$ y costos de insumos de contingencia). Los supuestos, fórmulas y desgloses de dichos parámetros estimados se detallan explícitamente en las planillas de soporte del trabajo \cite{refGP}.
 
@@ -139,6 +142,9 @@ Para alimentar y calibrar el modelo predictivo en este contexto de crisis, se de
 
 \subsection{Parámetros Clínicos: Hospitalización, Severidad y Letalidad}
 La conversión de casos en requerimientos de insumos emplea tasas de consumo tecnológico ($T_{i,r}$) y ponderadores clínicos de gravedad ($\mu_i$), estructurados bajo directrices de la Organización Mundial de la Salud (OMS) y la Organización Panamericana de la Salud (OPS). El modelo filtra la demanda bruta según tasas de hospitalización esperadas e índices de letalidad:
+
+Es preciso aclarar que el coeficiente $\mu_i$ constituye una escala ordinal de severidad que expresa el orden de prioridad clínica entre patologías dentro de una misma modalidad asistencial (baja/moderada = 1 para Dengue, alta = 2 para Bronquiolitis y muy alta = 3 para Influenza). Esta asignación numérica representa un orden jerárquico relativo y no una relación de proporcionalidad cardinal; en particular, no significa que la influenza sea exactamente tres veces más grave que el dengue ni que la bronquiolitis sea el doble, sino que proporciona al algoritmo un criterio de jerarquización ordinal para dar mayor importancia a los déficits asociados a cuadros de mayor severidad dentro de cada modalidad.
+
 \begin{table}[htbp]
     \caption{Indicadores clínicos de severidad y requerimientos asistenciales (basado en \cite{ref14, ref15})}
     \label{tab:indicadores_clinicos}
@@ -148,11 +154,11 @@ La conversión de casos en requerimientos de insumos emplea tasas de consumo tec
         \hline
         \multicolumn{1}{|>{\centering\arraybackslash}m{1.5cm}|}{\textbf{Patología ($i$)}} & \multicolumn{1}{>{\centering\arraybackslash}m{1.8cm}|}{\textbf{Hosp. (Camas)}} & \multicolumn{1}{>{\centering\arraybackslash}m{1.8cm}|}{\textbf{Cuidados Críticos (UTI/ARM)}} & \multicolumn{1}{>{\centering\arraybackslash}m{2.1cm}|}{\textbf{Prioridad / Letalidad ($\mu_i$)}} \\
         \hline
-        1. Dengue                                                                         & 5\% - 7\% (Crítica / Alarma)                                                   & $<$ 1\% (Dengue Grave)                                                                       & Bajo / Mod. (Prioridad: Hidratación)                                                             \\
+        1. Dengue                                                                         & 5\% - 7\% (Crítica / Alarma)                                                   & $<$ 1\% (Dengue Grave)                                                                       & Bajo / Mod. ($\mu_1 = 1$)                                                                        \\
         \hline
-        2. Bronquiolitis (VSR)                                                            & 10\% - 15\% (Hipoxemia)                                                        & 3\% - 5\% (UTI)                                                                              & Alto (Riesgo pediátrico rápido)                                                                  \\
+        2. Bronquiolitis (VSR)                                                            & 10\% - 15\% (Hipoxemia)                                                        & 3\% - 5\% (UTI)                                                                              & Alto ($\mu_2 = 2$)                                                                               \\
         \hline
-        3. Influenza A / ETI                                                              & 8\% - 12\% (Riesgo)                                                            & 4\% - 6\% (Insuf. Resp.)                                                                     & Muy Alto (Mortalidad adultos mayores)                                                            \\
+        3. Influenza A / ETI                                                              & 8\% - 12\% (Riesgo)                                                            & 4\% - 6\% (Insuf. Resp.)                                                                     & Muy Alto ($\mu_3 = 3$)                                                                           \\
         \hline
     \end{tabular}
 \end{table}
@@ -197,69 +203,119 @@ Para cuantificar la desviación y precisión de las proyecciones frente a los va
     MAD = \frac{1}{n} \sum_{t=1}^{n} |y_t - F_t|
 \end{equation}
 
-\subsection{Conversión de la Demanda y Modelo de Interfaz (Tabla de Uso)}
-Para adaptar la demanda provincial bruta proyectada $F_{i,t+m}$ a la escala de planificación operativa de un efector hospitalario nodal en el modelo de optimización, se formaliza la conversión mediante la herramienta denominada ``Tabla de Uso'', fundamentada en dos coeficientes del sistema sanitario:
+\subsection{Conversión de la Demanda y Segmentación Asistencial}
+Para adaptar la demanda provincial bruta proyectada $F_{i,t+m}$ a la escala de planificación operativa del efector hospitalario nodal (Hospital Centro de Salud Zenón J. Santillán) en el modelo de optimización, se formaliza la conversión mediante la denominada ``Tabla de Uso'', fundamentada en dos coeficientes del sistema sanitario:
 
 \begin{itemize}
-    \item \textbf{Factor de absorción del subsistema público ($\theta_{\text{público}} = 0{,}60$):} Aunque la tasa de población sin cobertura formal de salud en Tucumán es del 42\% (Censo 2022 \cite{ref12}), durante contingencias epidémicas agudas (brotes de Dengue y picos de IRAB) el subsistema público (SIPROSA) absorbe aproximadamente el 60\% ($\theta_{\text{público}} = 0{,}60$) de la demanda directa efectiva. Esto responde a la saturación del sector privado, la falta de áreas de aislamiento febril o UTI pediátricas/adultas en clínicas privadas, y a la centralización de los protocolos de contingencia en la red pública.
+    \item \textbf{Factor de absorción del subsistema público ($\theta_{\text{público}} = {,}60$):} Aunque la tasa de población sin cobertura formal de salud en Tucumán es del 42\% (Censo 2022 \cite{ref12}), durante contingencias epidémicas agudas (brotes de Dengue y picos de IRAB) el subsistema público (SIPROSA) absorbe aproximadamente el 60\% ($\theta_{\text{público}} = {,}60$) de la demanda directa efectiva. Esto responde a la saturación del sector privado, la falta de áreas de aislamiento febril o UTI pediátricas/adultas en clínicas privadas, y a la centralización de los protocolos de contingencia en la red pública.
     \item \textbf{Red de efectores de tercer nivel ($H_{\text{nodales}} = 6$):} La atención asistencial de contingencia de mediana y alta complejidad en la provincia se concentra en 6 hospitales públicos de Nivel III (Hospital Centro de Salud, Hospital Padilla, Hospital Avellaneda, Hospital del Niño Jesús, Hospital Eva Perón y Hospital de Concepción). La carga del sector público se distribuye equitativamente entre estos 6 efectores nodales.
 \end{itemize}
 
-De este modo, la demanda semanal ajustada $D_i$ que ingresa como parámetro determinístico a las restricciones de flujo del modelo de Programación por Metas en la semana objetivo se calcula formalmente como:
+La demanda hospitalaria semanal ajustada $D_i$ que ingresa como parámetro determinístico a las restricciones de flujo en la semana objetivo se calcula formalmente como:
 \begin{equation}
     D_i = \left\lceil \frac{F_{i, t+m} \cdot \theta_{\text{público}}}{H_{\text{nodales}}} \right\rceil
 \end{equation}
-donde $\lceil \cdot \rceil$ representa la función techo para asegurar un valor entero y conservador en la estimación de pacientes hospitalarios.
+donde $\lceil \cdot \rceil$ representa la función techo para asegurar un valor entero y conservador. Para la Semana Epidemiológica 19, la demanda proyectada ajustada total asciende a 385 pacientes: $D_1 = 253$ (Dengue), $D_2 = 68$ (Bronquiolitis) y $D_3 = 64$ (Influenza).
 
-\subsection{Modelo de Optimización (Programación por Metas Lexicográfica)}
-El modelo PLEM original fue reformulado hacia una Programación por Metas (Goal Programming) con prioridades lexicográficas \cite{refGP} para resolver el conflicto entre la cobertura médica y la sustentabilidad presupuestaria sin necesidad de monetizar el valor de la vida humana.
+\subsubsection{Segmentación por Modalidad Asistencial (Triaje Clínico)}
+A fin de reflejar la realidad asistencial y evitar tratar a todos los pacientes como una categoría homogénea, la demanda total $D_i$ se divide en tres modalidades de atención: Cuidados Intensivos ($D_{i,\text{UTI}}$), Hospitalización General ($D_{i,\text{Gen}}$) y Atención Ambulatoria ($D_{i,\text{Amb}}$).
+
+Se aplican las tasas de internación e ingreso a cuidados críticos por patología:
+\begin{itemize}
+    \item \textbf{Dengue ($i=1$):} 6{,}0\% de hospitalización base (0{,}5\% UTI, 5{,}5\% general, 94{,}0\% ambulatorio).
+    \item \textbf{Bronquiolitis ($i=2$):} 12{,}5\% de hospitalización base (4{,}0\% UTI, 8{,}5\% general, 87{,}5\% ambulatorio).
+    \item \textbf{Influenza ($i=3$):} 10{,}0\% de hospitalización base (5{,}0\% UTI, 5{,}0\% general, 90{,}0\% ambulatorio).
+\end{itemize}
+
+\textbf{Criterio de Redondeo Conservador:} Los pacientes de mayor gravedad ($D_{i,\text{UTI}}$ y $D_{i,\text{Gen}}$) se redondean hacia arriba mediante la función techo ($\lceil \cdot \rceil$) para evitar la subestimación de necesidades asistenciales críticas. La cantidad ambulatoria se obtiene por diferencia: $D_{i,\text{Amb}} = D_i - D_{i,\text{UTI}} - D_{i,\text{Gen}}$, garantizando que las tres modalidades sumen exactamente la demanda total $D_i$.
+
+\begin{table}[htbp]
+    \caption{Segmentación de la demanda hospitalaria por patología y modalidad (SE 19)}
+    \label{tab:segmentacion_demanda}
+    \centering
+    \setlength{\tabcolsep}{3pt}
+    \begin{tabular}{|>{\raggedright\arraybackslash}m{2.2cm}|>{\centering\arraybackslash}m{1.4cm}|>{\centering\arraybackslash}m{1.2cm}|>{\centering\arraybackslash}m{1.2cm}|>{\centering\arraybackslash}m{1.1cm}|}
+        \hline
+        \textbf{Patología ($i$)} & \textbf{Demanda Total ($D_i$)} & \textbf{UTI ($D_{i,\text{UTI}}$)} & \textbf{General ($D_{i,\text{Gen}}$)} & \textbf{Amb. ($D_{i,\text{Amb}}$)} \\
+        \hline
+        1. Dengue                & 253                            & 2                                 & 14                                    & 237                                \\
+        \hline
+        2. Bronquiolitis         & 68                             & 3                                 & 6                                     & 59                                 \\
+        \hline
+        3. Influenza             & 64                             & 4                                 & 3                                     & 57                                 \\
+        \hline
+        \textbf{Total}           & \textbf{385}                   & \textbf{9}                        & \textbf{23}                           & \textbf{353}                       \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Modelo de Optimización (Programación por Metas Lexicográfica por Subetapas)}
+El modelo resuelve la asignación mediante una Programación por Metas Lexicográfica con prioridades absolutas ($P_1 \gg P_2$) para proteger la cobertura médica antes de evaluar la conveniencia financiera \cite{refGP}.
 
 \subsubsection{Variables de Decisión}
-Las variables principales definen la cantidad de pacientes de la patología $i$ que son atendidos ($X_i$) o que no logran recibir atención por saturación ($F_i$):
-\begin{equation}
-    X_i, F_i \in \mathbb{Z}_0^+ \quad \forall i \in \{1, 2, 3\}
-\end{equation}
-La variable $V_{r,i}$ representa la cantidad del recurso $r$ asignada a la patología $i$. Su dominio se divide según la naturaleza del recurso:
 \begin{itemize}
-    \item \textbf{Recursos discretos (camas, kits):} $V_{r,i} \in \mathbb{Z}_0^+$ para $r \in \{1, 2, 4, 5\}$.
-    \item \textbf{Recursos continuos (horas):} $V_{r,i} \in \mathbb{R}_0^+$ para $r \in \{3, 6, 7\}$.
+    \item $X_{i,m} \in \mathbb{Z}_0^+$: Pacientes atendidos de la patología $i$ en la modalidad $m \in \{\text{UTI}, \text{Gen}, \text{Amb}\}$ bajo el paquete completo exigido por guía técnica.
+    \item $F_{i,m} \in \mathbb{Z}_0^+$: Pacientes no atendidos bajo el estándar completo de la guía técnica en la patología $i$ y modalidad $m$. No implica abandono del paciente, sino la activación de protocolos de contingencia (atención de contención sintomática en guardia, reprogramación de turnos y derivación a la red secundaria).
+    \item $V_{r,i}$: Cantidad del recurso $r$ asignada a la patología $i$. Dominio discreto $V_{r,i} \in \mathbb{Z}_0^+$ para recursos indivisibles (camas en días-cama, kits, $r \in \{1,2,4,5\}$) y dominio continuo $V_{r,i} \in \mathbb{R}_0^+$ para recursos basados en tiempo (horas de oxígeno, médico, enfermería, $r \in \{3,6,7\}$).
+    \item $d_2^-, d_2^+ \ge 0$: Variables de desvío de la meta financiera (presupuesto no utilizado y sobrecosto).
 \end{itemize}
-Adicionalmente, se incorporan las variables de desvío no negativas propias del sistema de metas: $d_1^-, d_1^+, d_2^-, d_2^+ \ge 0$.
 
 \subsubsection{Restricciones Estructurales (Duras)}
-El sistema está sujeto a limitaciones físicas y protocolares innegociables:
 \begin{itemize}
-    \item \textbf{Garantía de protocolo médico:} Un paciente solo se considera atendido si recibe íntegramente la cantidad mínima de cada recurso requerida por la tasa de consumo tecnológico ($T_{i,r}$).
+    \item \textbf{Garantía de Protocolo Médico por Modalidad:} Un paciente solo se considera atendido si recibe el paquete completo de recursos requerido por protocolo:
           \begin{equation}
-              V_{r,i} \ge T_{i,r} X_i \quad \forall r, i
+              V_{r,i} \ge \sum_{m \in \{\text{UTI}, \text{Gen}, \text{Amb}\}} T_{i,r,m} X_{i,m} \quad \forall r, i
           \end{equation}
-    \item \textbf{Capacidad neta disponible:} La asignación total de un recurso no puede superar su capacidad nominal máxima ($K_{\text{max},r}$) descontando la carga base histórica ineludible ($B_r$).
+    \item \textbf{Capacidad Neta Disponible:} Asignación sujeta a la capacidad nominal ($K_{\text{max},r}$) menos la carga base histórica ineludible ($B_r$):
           \begin{equation}
-              \sum_{i=1}^{3} V_{r,i} \le K_{\text{max},r} - B_r \quad \forall r
+              \sum_{i=1}^{3} V_{r,i} \le K_{\text{neta},r} = K_{\text{max},r} - B_r \quad \forall r
           \end{equation}
-    \item \textbf{Balance epidemiológico de flujo:} La totalidad de la demanda esperada ($D_i$) proyectada por el modelo de pronósticos debe ser atendida ($X_i$) o derivada/desatendida ($F_i$).
+          donde las camas generales y UTI se expresan en días-cama semanales ($K_{\text{max},1} = \text{camas físicas} \times 7 = 592{,}2$ días netos; $K_{\text{neta},2} = 79{,}8$ días netos de UTI).
+    \item \textbf{Balance Epidemiológico de Flujo por Modalidad:}
           \begin{equation}
-              X_i + F_i = D_i \quad \forall i
+              X_{i,m} + F_{i,m} = D_{i,m} \quad \forall i, m
           \end{equation}
 \end{itemize}
 
-\subsubsection{Sistema de Metas y Función Objetivo}
-El modelo plantea dos metas ordenadas bajo una prioridad lexicográfica absoluta ($P_1 \gg P_2$).
+\subsubsection{Estructura Lexicográfica en Subetapas}
+Para asegurar que los casos de mayor gravedad se atiendan antes de destinar recursos a menor complejidad, la Etapa 1 médica se subdivide en tres subetapas secuenciales, donde cada subetapa hereda una restricción de no retroceso:
 
-\textbf{Meta 1 (Prioridad Médica Absoluta):} Maximizar la cantidad de pacientes atendidos, priorizando sistemáticamente aquellas patologías con mayor índice de gravedad relativa ($\mu_i$). Matemáticamente, busca reducir a cero el desvío por falta de atención ($d_1^-$).
-\begin{equation}
-    \sum_{i=1}^{3} \mu_i X_i + d_1^- - d_1^+ = \sum_{i=1}^{3} \mu_i D_i
-\end{equation}
+\begin{enumerate}
+    \item \textbf{Subetapa 1A (Cuidados Intensivos - UTI):} Minimiza el déficit de atención en pacientes críticos ponderado por gravedad clínica ($\mu_i$):
+          \begin{equation}
+              \text{Minimizar } d_{\text{UTI}}^- = \sum_{i=1}^{3} \mu_i F_{i,\text{UTI}}
+          \end{equation}
+          donde $\mu_1 = 1$ (Dengue), $\mu_2 = 2$ (Bronquiolitis) y $\mu_3 = 3$ (Influenza). El valor óptimo alcanzado es $d_{\text{UTI}}^{-*} = 0$.
+    \item \textbf{Subetapa 1B (Hospitalización General):} Minimiza el déficit de internación general manteniendo la cobertura crítica inalterada:
+          \begin{equation}
+              \begin{aligned}
+                  \text{Minimizar } & d_{\text{GEN}}^- = \sum_{i=1}^{3} \mu_i F_{i,\text{Gen}} \\
+                  \text{s.a. }      & d_{\text{UTI}}^- \le d_{\text{UTI}}^{-*} = 0
+              \end{aligned}
+          \end{equation}
+          El valor óptimo alcanzado es $d_{\text{GEN}}^{-*} = 0$.
+    \item \textbf{Subetapa 1C (Atención Ambulatoria):} Maximiza la atención ambulatoria ponderada conservando en cero los déficits UTI y general:
+          \begin{equation}
+              \begin{aligned}
+                  \text{Minimizar } & d_{\text{AMB}}^- = \sum_{i=1}^{3} \mu_i F_{i,\text{Amb}} \\
+                  \text{s.a. }      & d_{\text{UTI}}^- = 0, \quad d_{\text{GEN}}^- = 0
+              \end{aligned}
+          \end{equation}
+    \item \textbf{Etapa 2 (Prioridad Financiera):} Minimiza el sobrecosto $d_2^+$ respecto al fondo de contingencia asignado ($\text{Presupuesto} = \$17.000.000$), sin degradar ningún logro médico previo:
+          \begin{equation}
+              \begin{aligned}
+                  \text{Minimizar } & d_2^+                                                                                          \\
+                  \text{s.a. }      & d_{\text{UTI}}^- = 0, \quad d_{\text{GEN}}^- = 0, \quad d_{\text{AMB}}^- = d_{\text{AMB}}^{-*}
+              \end{aligned}
+          \end{equation}
+          con la ecuación de meta financiera:
+          \begin{equation}
+              \sum_{r=1}^{7} \sum_{i=1}^{3} C_r V_{r,i} + d_2^- - d_2^+ = \text{Presupuesto}
+          \end{equation}
+\end{enumerate}
 
-\textbf{Meta 2 (Prioridad Financiera):} Minimizar el costo extraordinario total para ajustarse al presupuesto contingencial de la semana epidemiológica, reduciendo a cero el sobrecosto ($d_2^+$). Solo se activa tras alcanzar el máximo bienestar posible en la Meta 1, sin alterar sus logros.
-\begin{equation}
-    \sum_{r=1}^{7} \sum_{i=1}^{3} C_r V_{r,i} + d_2^- - d_2^+ = Presupuesto
-\end{equation}
 
-La \textbf{función objetivo} global minimiza de forma secuencial las desviaciones indeseadas respetando el orden ético-médico:
-\begin{equation}
-    \text{Minimizar } Z = P_1(d_1^-) + P_2(d_2^+)
-\end{equation}
+
 
 \section{Resolución}
 
@@ -273,7 +329,7 @@ El modelo de Holt-Winters Multiplicativo logró capturar las dinámicas específ
     \item \textbf{Influenza:} Reveló una circulación viral sostenida a lo largo del año con picos invernales superpuestos, permitiendo una proyección estable útil para prever horas de personal de salud y consumo de oxígeno.
 \end{itemize}
 
-A continuación se presentan los gráficos que comparan las series históricas reales de casos registrados contra las proyecciones obtenidas mediante el modelo predictivo calibrado para cada una de las patologías bajo estudio, dispuestos en secuencia vertical:
+A continuación se presentan las comparaciones gráficas entre las series históricas observadas y las proyecciones obtenidas mediante el modelo predictivo calibrado para las patologías evaluadas (Fig. \ref{fig:pronostico_dengue}, Fig. \ref{fig:pronostico_bronquiolitis} y Fig. \ref{fig:pronostico_influenza}):
 
 \begin{figure}[htbp]
     \centering
@@ -296,38 +352,116 @@ A continuación se presentan los gráficos que comparan las series históricas r
     \label{fig:pronostico_influenza}
 \end{figure}
 
+\FloatBarrier
 \subsection{Interfaz de Integración: Tabla de Uso}
-Dado que el modelo matemático de asignación de recursos en la fase de optimización es de carácter estático y semanal, se diseñó la herramienta denominada ``Tabla de Uso''. Esta interfaz actúa como un filtro dinámico que permite a los planificadores hospitalarios seleccionar una semana epidemiológica específica de interés (por ejemplo, el pico histórico de la SE 17). La Tabla de Uso extrae la demanda proyectada ($D_i$) del modelo de pronósticos y la transfiere de forma automática como un parámetro constante hacia las restricciones del modelo de Programación Lineal Entera Mixta (PLEM).
+El modelo de optimización por metas lexicográfica es de carácter estático y monoperíodo, diseñado para evaluar la planificación asistencial en una ventana temporal semanal aislada. Para articular este enfoque con la naturaleza dinámica y continua del modelo predictivo de series temporales, se implementó la herramienta denominada ``Tabla de Uso''.
 
-\subsection{Fase de Optimización: Resolución de la GP Lexicográfica}
-Resolver el modelo lexicográfico directamente asignando a $P_1$ y $P_2$ números arbitrariamente distintos en magnitud (técnica de "Big-M") puede generar problemas numéricos de escala en el motor de cálculo. Por ello, el modelo se resuelve de manera robusta en dos etapas secuenciales explícitas:
+Esta interfaz actúa como un filtro operativo que permite desacoplar la proyección secuencial de contagios y aislar semanas epidemiológicas críticas individuales (como el pico máximo de demanda de la SE 19). La Tabla de Uso toma la demanda bruta proyectada $F_{i,t+m}$, aplica los coeficientes de absorción pública ($\theta_{\text{público}} = {,}60$) y la división entre los efectores nodales ($H_{\text{nodales}} = 6$), e ingresa la demanda ajustada ($D_i = 385$) y su segmentación por triaje clínico como parámetros determinísticos estáticos en las restricciones del algoritmo de optimización.
+
+\subsection{Fase de Optimización: Resultados de la GP Lexicográfica}
+La resolución del modelo en dos etapas y tres subetapas arrojó los siguientes resultados:
+
+\subsubsection{Etapa 1: Cobertura por Subetapas Médicas}
 \begin{itemize}
-    \item \textbf{Etapa 1 (Prioridad Médica):} Se minimiza el desvío $d_1^-$ (equivalente a Maximizar $\sum \mu_i X_i$) sujeto únicamente a las restricciones duras. El valor óptimo alcanzado se guarda como $d_1^{-*}$.
-    \item \textbf{Etapa 2 (Prioridad Financiera):} Se añade la restricción $d_1^- \le d_1^{-*}$ al modelo, fijando la cobertura médica lograda como innegociable. Luego, se cambia la función objetivo para minimizar el sobrecosto $d_2^+$ y se resuelve nuevamente para obtener la asignación definitiva de recursos ($V_{r,i}$) y su costo real.
+    \item \textbf{Subetapa 1A (UTI):} Se atienden los 2 pacientes críticos de dengue, 3 de bronquiolitis y 4 de influenza. Cobertura UTI del 100\% (9/9), $d_{\text{UTI}}^- = 0$. Utiliza 62 días-cama UTI de los 79,8 disponibles (quedan 17,8 días-cama holgados).
+    \item \textbf{Subetapa 1B (General):} Se atienden los 14 pacientes internados de dengue, 6 de bronquiolitis y 3 de influenza. Cobertura General del 100\% (23/23), $d_{\text{GEN}}^- = 0$. Utiliza 104 días-cama de los 592,2 disponibles.
+    \item \textbf{Subetapa 1C (Ambulatoria):} Con los recursos remanentes, Solver atiende 68 pacientes ambulatorios de dengue, 0 de bronquiolitis y 12 de influenza. Déficit ambulatorio ponderado final $d_{\text{AMB}}^- = 422$ ($169 \times 1 + 59 \times 2 + 45 \times 3$).
 \end{itemize}
+
+En total, se atienden 112 de los 385 pacientes (29,1\% de cobertura global), garantizando el 100\% de protección a los casos graves e internados.
+
+\begin{table}[htbp]
+    \caption{Resumen asistencial de pacientes atendidos y no atendidos por modalidad}
+    \label{tab:resultados_atencion}
+    \centering
+    \setlength{\tabcolsep}{3pt}
+    \begin{tabular}{|>{\raggedright\arraybackslash}m{1.8cm}|>{\centering\arraybackslash}m{1.1cm}|>{\centering\arraybackslash}m{1.1cm}|>{\centering\arraybackslash}m{1.0cm}|>{\centering\arraybackslash}m{1.1cm}|>{\centering\arraybackslash}m{1.3cm}|}
+        \hline
+        \textbf{Patología} & \textbf{Amb.} & \textbf{General} & \textbf{UTI} & \textbf{Total Atend.} & \textbf{No Atend.} \\
+        \hline
+        Dengue             & 68            & 14               & 2            & 84                    & 169                \\
+        \hline
+        Bronquiolitis      & 0             & 6                & 3            & 9                     & 59                 \\
+        \hline
+        Influenza          & 12            & 3                & 4            & 19                    & 45                 \\
+        \hline
+        \textbf{Total}     & \textbf{80}   & \textbf{23}      & \textbf{9}   & \textbf{112}          & \textbf{273}       \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\subsubsection{Uso de Recursos y Cuellos de Botella al Cierre de la Etapa 1}
+El análisis de utilización de recursos demuestra que la infraestructura física pesada no constituye el factor limitante:
+
+\begin{table}[htbp]
+    \caption{Balance de utilización de recursos hospitalarios en la Etapa 1}
+    \label{tab:uso_recursos}
+    \centering
+    \setlength{\tabcolsep}{3pt}
+    \begin{tabular}{|>{\raggedright\arraybackslash}m{2.3cm}|>{\centering\arraybackslash}m{1.0cm}|>{\centering\arraybackslash}m{1.2cm}|>{\centering\arraybackslash}m{1.1cm}|>{\centering\arraybackslash}m{1.2cm}|}
+        \hline
+        \textbf{Recurso ($r$)} & \textbf{Uso} & \textbf{Cap. Neta} & \textbf{Holgura} & \textbf{\% Uso}  \\
+        \hline
+        Camas generales (días) & 104,0        & 592,2              & 488,2            & 17,6\%           \\
+        \hline
+        Camas UTI (días)       & 62,0         & 79,8               & 17,8             & 77,7\%           \\
+        \hline
+        Oxígeno/ARM (horas)    & 1.284,0      & 7.711,2            & 6.427,2          & 16,7\%           \\
+        \hline
+        Kits de hidratación    & 737,0        & 742,5              & 5,5              & 99,3\%           \\
+        \hline
+        Kits respiratorios     & 102,0        & 102,0              & 0,0              & \textbf{100,0\%} \\
+        \hline
+        Horas médicas          & 429,0        & 2.931,3            & 2.502,3          & 14,6\%           \\
+        \hline
+        Horas enfermería       & 1.510,0      & 4.167,6            & 2.657,6          & 36,2\%           \\
+        \hline
+    \end{tabular}
+\end{table}
+
+Los verdaderos cuellos de botella son los \textbf{Kits Respiratorios} (100,0\% de uso) y los \textbf{Kits de Hidratación} (99,3\% de uso). Estos insumos insustituibles agotan la capacidad asistencial ambulatoria a pesar de la holgura en camas y horas de personal.
+
+\subsubsection{Etapa 2: Resultado Financiero y Sobrecosto}
+La Etapa 2 minimiza el gasto operativo asegurando no retroceder en los resultados médicos alcanzados:
+\begin{itemize}
+    \item \textbf{Costo operativo mínimo requerido:} $\$40.321.805,93$.
+    \item \textbf{Presupuesto contingencial disponible:} $\$17.000.000,00$.
+    \item \textbf{Presupuesto no utilizado ($d_2^-$):} $\$0,00$.
+    \item \textbf{Sobrecosto mínimo ($d_2^+$):} $\$23.321.805,93$.
+\end{itemize}
+
+El costo total equivale al 237,2\% del fondo asignado; el sobrecosto representa un 137,2\% adicional por encima del presupuesto. La mayor parte del costo operativo proviene de las Camas UTI (38,4\%) y Horas de Enfermería (21,9\%).
 
 \section{Interpretación}
 
 \subsection{Interpretación del Modelo de Pronósticos (Holt-Winters)}
-La interpretación del comportamiento de las curvas proyectadas indica que el modelo de Holt-Winters Multiplicativo se adapta eficazmente a la volatilidad de los brotes en la provincia de Tucumán. El análisis del dengue revela coeficientes estacionales sumamente altos concentrados en un intervalo de pocas semanas, lo cual exige una planificación reactiva intensiva y focalizada para evitar la saturación inmediata. Por el contrario, la demanda estacional de bronquiolitis e influenza muestra una distribución más suavizada a lo largo de la temporada invernal, lo que permite estructurar un esquema de abastecimiento preventivo y distribución de turnos médicos programada en el tiempo. La Tabla de Uso permite traducir directamente esta dinámica predictiva en los requerimientos específicos de demanda ($D_i$) para cada escenario de estrés sanitario.
+El modelo de Holt-Winters Multiplicativo captura con precisión la dinámica epidemiológica de Tucumán. La anulación de la constante de tendencia ($\beta \to 0$) por parte de Solver confirma que las epidemias estacionales presentan un comportamiento oscilatorio cíclico anual sin tendencia secular de largo plazo.
 
-\subsection{Interpretación del Modelo de Optimización (GP Lexicográfica)}
-El modelo de Programación por Metas Lexicográfica resuelto en dos etapas cumple su objetivo central de separar de forma tajante la decisión médica de la decisión financiera. Esta formulación asegura que el presupuesto disponible nunca pueda dictaminar una reducción en la cobertura sanitaria ya garantizada por la infraestructura física, evitando penalizar la ética médica frente al costo operativo. A nivel táctico, la Etapa 2 evidencia el grado de insuficiencia de los fondos de contingencia sin distorsionar el triaje.
+\subsection{Interpretación del Modelo de Optimización (GP Lexicográfica por Subetapas)}
+La estructura en subetapas resuelve de forma éticamente irreprochable el triaje:
+\begin{enumerate}
+    \item Protege al 100\% de las vidas en riesgo crítico (UTI) y de los casos graves con necesidad de hospitalización general.
+    \item Evita la monetización de la salud al impedir que la Meta 2 altere la cobertura alcanzada en la Meta 1.
+    \item Revela de manera objetiva que la brecha ambulatoria no se debe a restricciones de espacio ni de personal, sino a cuellos de botella logísticos en insumos descartables (kits).
+    \item Identifica un dilema de política sanitaria en la asignación ambulatoria: Bronquiolitis recibe 0 atención ambulatoria en el óptimo matemático puro debido a que Influenza posee un ponderador de severidad mayor ($\mu_3 = 3$ vs. $\mu_2 = 2$) y consume menos kits respiratorios por paciente. Este hallazgo demuestra la necesidad de que los gestores sanitarios complementen la optimización pura con políticas explícitas de equidad.
+    \item Clarifica el significado sanitario de la variable de déficit $F_{i,m}$ (pacientes no atendidos bajo el estándar completo del efector): un valor $F_{i,m} > 0$ no implica de ningún modo el abandono ni que se deje a la deriva al paciente. En el contexto de la gestión sanitaria pública (SIPROSA), indica únicamente que no es posible dispensar el paquete de atención integral con la rigurosidad técnica estándar fijada por las guías clínicas. La resolución asistencial para esta demanda no absorbida en el estándar primario se encauza mediante un esquema tripartito: a) atención sintomática de contención en guardia; b) reprogramación de turnos no urgentes; y c) derivación institucional coordinada hacia efectores de la red secundaria de salud.
+\end{enumerate}
 
 \section{Conclusiones}
 
-El presente trabajo ha permitido establecer un marco analítico integral para la toma de decisiones hospitalarias ante crisis epidemiológicas, combinando pronósticos y optimización. A partir del desarrollo e implementación de las fases metodológicas, se concluye que:
+El presente trabajo ha permitido establecer un marco analítico integral de soporte a las decisiones hospitalarias ante crisis epidemiológicas, articulando pronósticos de series temporales y optimización multiobjetivo. A partir del desarrollo e implementación de la metodología propuesta, se arriban a las siguientes conclusiones principales:
 
 \begin{itemize}
-    \item \textbf{Efectividad del Modelo Predictivo:} La Suavización Exponencial Triple Holt-Winters con estacionalidad multiplicativa demostró ser una metodología matemática altamente efectiva para modelar brotes epidémicos estacionales no lineales, logrando capturar tanto la explosividad aguda del Dengue como los ciclos invernales de las patologías respiratorias (Bronquiolitis e Influenza).
-    \item \textbf{Comportamiento de la Constante de Tendencia ($\beta \to 0$):} Al optimizar los parámetros de suavizamiento ($\alpha, \beta, \gamma$) en Excel Solver para minimizar la Desviación Absoluta Media ($MAD$), la constante de tendencia $\beta$ tendió sistemáticamente a cero ($\beta \approx 0$). Esto ocurre porque los brotes epidemiológicos estacionales no obedecen a una tendencia secular persistente de largo plazo, sino a un comportamiento puramente oscilatorio y cíclico anual regulado por el nivel base ($L_t$) y por factores estacionales multiplicativos muy marcados ($S_t$). Permitir una constante $\beta > 0$ generaría proyecciones con tendencias lineales espurias que amplificarían artificialmente los picos epidémicos o producirían valores negativos durante las fases interepidémicas; por ende, la anulación de $\beta$ por parte de Solver preserva la estabilidad del nivel y la periodicidad estacional real.
-    \item \textbf{Recuperación Digital de Datos:} El uso de la herramienta WebPlotDigitizer permitió recuperar información cuantitativa de alta fidelidad a partir de curvas publicadas en reportes oficiales no estructurados, eliminando sesgos en el ingreso de datos históricos.
-    \item \textbf{Desacoplamiento Operativo:} La Tabla de Uso demostró ser una interfaz funcional efectiva para desacoplar y comunicar secuencialmente un modelo dinámico de series temporales con un modelo estático y discreto de optimización semanal.
-    \item \textbf{Cobertura Médica Lograda:} De una demanda semanal proyectada de 530 pacientes, el modelo logró atender a 111 (20,9\%), revelando que incluso optimizando la asignación según la gravedad clínica, la capacidad instalada es crónicamente insuficiente ante picos epidémicos.
-    \item \textbf{Restricción Financiera (Sobrecosto):} El costo mínimo para sostener esa cobertura ascendió a \$45.931.015, lo que representa un sobrecosto ($d_2^+$) de \$28.931.015 por encima del fondo de contingencia (\$17.000.000). Esto demuestra cuantitativamente la incompatibilidad del presupuesto actual con la demanda real.
-    \item \textbf{Identificación de Cuellos de Botella:} Contrario a la percepción de falta de infraestructura general, el modelo identificó que los verdaderos limitantes fueron los insumos descartables (Kits Respiratorios al 99,0\% y Kits de Hidratación al 99,3\% de uso). Recursos como camas UTI y horas médicas mostraron un amplio margen ocioso, ofreciendo una vía de solución mucho más directa y económica vía gestión de compras.
+    \item \textbf{Modelación Predictiva de Brotes Epidémicos:} La Suavización Exponencial Triple de Holt-Winters con estacionalidad multiplicativa demostró ser una herramienta altamente efectiva para caracterizar patrones no lineales, logrando capturar tanto los picos epidémicos del dengue como el comportamiento cíclico invernal de las infecciones respiratorias agudas bajas (bronquiolitis e influenza). Asimismo, la convergencia a cero de la constante de tendencia ($\beta \to 0$) valida la hipótesis epidemiológica de que los brotes estacionales responden a dinámicas oscilatorias anuales reguladas por factores estacionales y niveles base, sin tendencias seculares persistentes de largo plazo.
+    \item \textbf{Protección Asistencial y Rigor Ético-Médico:} La estructuración del modelo de Programación por Metas Lexicográfica en subetapas secuenciales resolvió de manera robusta el triaje clínico. Se garantizó la cobertura integral (100\%) de los pacientes en estado crítico (UTI) y de aquellos que requerían hospitalización general, demostrando que la prioridad asistencial médica puede preservarse de forma innegociable sin supeditar el valor de la vida humana a restricciones presupuestarias.
+    \item \textbf{Interpretación Sanitaria de la Demanda No Atendida ($F_{i,m}$):} Se estableció que un registro de déficit $F_{i,m} > 0$ no constituye abandono ni desatención médica del paciente, sino la imposibilidad puntual de aplicar el protocolo asistencial bajo la máxima rigurosidad prescrita por las guías técnicas internacionales. La red pública de salud (SIPROSA) gestiona esta demanda mediante mecanismos de contención inicial en guardia, reprogramación oportuna de consultas ambulatorias y derivación asistida hacia efectores secundarios.
+    \item \textbf{Identificación de Cuellos de Botella Operativos:} El análisis de capacidad evidenció que la restricción principal del sistema público de salud ante escenarios de contingencia no se encuentra en la infraestructura física rígida de camas (17,6\% de uso en sala general y 77,7\% en UTI) ni en la disponibilidad de personal sanitario (14,6\% de horas médicas y 36,2\% de horas de enfermería). Por el contrario, los verdaderos cuellos de botella críticos radican en el desabastecimiento de insumos descartables específicos, como Kits Respiratorios (100,0\% de utilización) y Kits de Hidratación (99,3\%), ofreciendo a los gestores de salud una directriz operativa clara para focalizar las políticas de compra y stock contingencial.
+    \item \textbf{Cuantificación del Déficit Financiero:} La segunda etapa del modelo permitió determinar con precisión el costo operativo mínimo necesario para sostener la cobertura médica priorizada (\$40.321.805,93), identificando una brecha presupuestaria del 137,2\% sobre el fondo de contingencia asignado (\$17.000.000,00). Esta cuantificación cuantitativa ofrece una base objetiva para justificar reasignaciones presupuestarias ministeriales ante emergencias sanitarias.
+    \item \textbf{Aporte Metodológico y Resguardo Ético:} El sistema desarrollado constituye un instrumento de gestión proactivo, transparente y orientativo para la red de salud pública, capaz de prever la asignación óptima de recursos sin reemplazar jamás el juicio clínico. Se enfatiza que el modelo matemático actúa como soporte cuantitativo de planificación, permaneciendo siempre supeditado al criterio médico profesional, la deontología sanitaria y los valores éticos y morales de la sociedad.
+    \item \textbf{Trabajo Futuro y Extensión Dinámica Multiperíodo:} Como propuesta de trabajo futuro, se plantea extender la presente formulación estática monoperíodo hacia un modelo dinámico multiperíodo que incorpore ecuaciones de balance de inventario de insumos entre semanas epidemiológicas consecutivas, traslape de la duración real de estancia hospitalaria ($LOS$) y programación estocástica o por escenarios para cuantificar formalmente la incertidumbre de la demanda proyectada.
 \end{itemize}
 
+\vfill\newpage
 \begin{thebibliography}{00}
     \bibitem{ref1} Ministerio de Salud Pública de Tucumán. (2024). Sala de situación epidemiológica. Dirección de Epidemiología.
     \bibitem{ref2} Mahmud, N., Ali, N. A., Pazil, N. S. M., \& Jamaluddin, S. H. (2022). Predicting dengue outbreak in Selangor using Holt-Winters models. International Journal of Academic Research in Business and Social Sciences, 12(1).
@@ -345,11 +479,11 @@ El presente trabajo ha permitido establecer un marco analítico integral para la
     \bibitem{ref14} Organización Mundial de la Salud [OMS]. (2023). Dengue y dengue grave: Datos y cifras.
     \bibitem{ref15} Organización Panamericana de la Salud [OPS]. (2022). Actualización Epidemiológica: Virus Respiratorio Sincitial (VSR) e Influenza en la Región de las Américas.
     \bibitem{refExcel} Veliz, I. M., Bellor, M. E., Diaz, D. S., Jimenez, F. E., \& Zato, C. A. (2026). Planilla de soporte y calibración del modelo de pronósticos: \emph{Optimización de la gestión de recursos críticos hospitalarios}. Disponible en: \url{https://bit.ly/pronosticos_invop}
-    \bibitem{refGP} Veliz, I. M., Bellor, M. E., Diaz, D. S., Jimenez, F. E., \& Zato, C. A. (2026). Modelo de Asignación de Recursos Hospitalarios — GP Lexicográfica. \emph{Optimización de la gestión de recursos críticos hospitalarios}. Disponible en: \url{https://bit.ly/programacion_lineal_invop}
+    \bibitem{refGP} Veliz, I. M., Bellor, M. E., Diaz, D. S., Jimenez, F. E., \& Zato, C. A. (2026). Modelo de Asignación de Recursos Hospitalarios — GP Lexicográfica. \emph{Optimización de la gestión de recursos críticos hospitalarios}. Disponible en: \url{http://bit.ly/modelo_gp_invop}
     \bibitem{refMSPT2} Ministerio de Salud Pública de Tucumán. \emph{Hospital Centro de Salud Zenón J. Santillán: Características y servicios}. Gobierno de Tucumán. Disponible en: \url{https://msptucuman.gov.ar/hospitales/hospital-centro-de-salud-zenon-j-santillan/caracteristicas/}
     \bibitem{refLey5908} Poder Ejecutivo de la Provincia de Tucumán. \emph{Ley Nº 5908: Carrera Sanitaria Provincial y modificatorias}. Ministerio de Salud Pública de Tucumán. Disponible en: \url{https://msptucuman.gov.ar/wordpress/wp-content/uploads/2023/12/Ley-5908-Carrera-Sanitaria-original-Fue-modificada-por-Ley-8757.pdf}
     \bibitem{refATE} Asociación Trabajadores del Estado (ATE). \emph{Escalas salariales y convenios colectivos del sector salud (Decreto Nº 1133/09)}. Convenios Colectivos ATE. Disponible en: \url{https://convenios.ate.org.ar/wp-content/uploads/2026/06/Salud-1133-jun-ago2026.pdf}
-    \bibitem{refClarin} Redacción Clarín. (2026). \emph{Cuánto cobran las enfermeras: sueldos, categorías y adicionales vigentes}. Clarín. Disponible en: \url{https://www.clarin.com/informacion-general/cobran-enfermeras-enero-2026-sueldos-categoria-extras-suman_0_fPaEoUF0fu.html}
+
     \bibitem{refOPS2} Organización Panamericana de la Salud (OPS). \emph{Documentos técnicos y directrices regionales en salud pública}. OPS/Iris. Disponible en: \url{https://iris.paho.org/items/0832bcad-f6b2-4c52-bb28-eac8f587fb6e}
     \bibitem{refOMS2} Organización Mundial de la Salud (OMS). \emph{Publicaciones científicas y técnicas institucionales}. OMS/Iris. Disponible en: \url{https://iris.who.int/items/1c1f7fd3-44cd-4029-9a95-4470427834bf}
 \end{thebibliography}

@@ -2,6 +2,6 @@
 *
 
 # Allow the LaTeX source file and this .gitignore file
-!INVOP_TFI_2doAvance.tex
+!INVOP_TFI.tex
 !.gitignore
 !factores_inconclusos.md
